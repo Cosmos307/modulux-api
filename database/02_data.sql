@@ -45,7 +45,7 @@ VALUES
 -- Person dem Studiengang als Verantwortlicher zuordnen
 INSERT INTO studiengang_person_rolle (studiengang_id, person_id, rolle_id)
 VALUES 
-    (2, 
+    (1, 
     (SELECT person_id FROM person WHERE email = 'jean-alexander.mueller@htwk-leipzig.de'), 
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher')),
     (2,
@@ -335,13 +335,13 @@ VALUES
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Dozent'));
 
 -- Zuordnung der Module zu Studiengängen
-INSERT INTO modul_studiengang (modul_kuerzel, modul_version, studiengang_id, modul_typ)
+INSERT INTO modul_studiengang (modul_kuerzel, modul_version, studiengang_id, semester ,modul_typ)
 VALUES
-    ('C114', 2, 1, 'Pflichtmodul'),  -- Modellierung
-    ('C114', 2, 2, 'Pflichtmodul'),
-    ('C287', 3, 1, 'Pflichtmodul'),  -- Betriebssysteme und Rechnernetze
-    ('C287', 3, 2, 'Pflichtmodul'),
-    ('C287.1', 3, 1, 'Pflichtmodul'), -- Betriebssysteme
-    ('C287.1', 3, 2, 'Pflichtmodul'),
-    ('C287.2', 3, 1, 'Pflichtmodul'), -- Rechnernetze
-    ('C287.2', 3, 2, 'Pflichtmodul');
+    ('C114', 2, 1, 1, 'Pflichtmodul'),  -- Modellierung
+    ('C114', 2, 2, 1, 'Pflichtmodul'),
+    ('C287', 3, 1, 3, 'Pflichtmodul'),  -- Betriebssysteme und Rechnernetze
+    ('C287', 3, 2, 3, 'Pflichtmodul'),
+    ('C287.1', 3, 1, 3, 'Pflichtmodul'), -- Betriebssysteme
+    ('C287.1', 3, 2, 3, 'Pflichtmodul'),
+    ('C287.2', 3, 1, 3, 'Pflichtmodul'), -- Rechnernetze
+    ('C287.2', 3, 2, 3, 'Pflichtmodul');
