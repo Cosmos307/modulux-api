@@ -11,5 +11,7 @@ func PersonRoutes(router *gin.Engine) {
 	personGroup := router.Group("/persons")
 	{
 		personGroup.GET("/", controller.GetPersons)
+		personGroup.GET("/:id", controller.GetPerson)
+
 	}
 }
