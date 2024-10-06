@@ -96,3 +96,25 @@ func UpdatePerson(c *gin.Context) {
 
 	c.JSON(http.StatusOK, updatedPerson)
 }
+
+// CreatePerson creates a new person in the database
+func CreatePerson(c *gin.Context) {
+
+	var newPerson models.Person
+
+	err := c.ShouldBindJSON(&newPerson)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx := context.Background()
+	query := "INSERT INTO person (titel, vorname, nachname, email, telefonnummer, raum, funktion) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id"
+	dbErr := database.DB.QueryRow(ctx, query, newPerson.Titel, newPerson.Vorname, newPerson.Nachname, newPerson.Email, newPerson.Telefonnummer, newPerson.Raum, newPerson.Funktion).Scan(&newPerson.PersonID)
+	if dbErr != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": dbErr.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, newPerson)
+}
