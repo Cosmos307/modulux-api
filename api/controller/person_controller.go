@@ -50,6 +50,11 @@ func GetPerson(c *gin.Context) {
 	ctx := context.Background()
 	var person models.Person
 
+	if personID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid person ID"})
+		return
+	}
+
 	query := "SELECT person_id, titel, vorname, nachname, email, telefonnummer, raum, funktion FROM person WHERE person_id = $1"
 	err := database.DB.QueryRow(ctx, query, personID).Scan(&person.PersonID, &person.Titel, &person.Vorname, &person.Nachname, &person.Email, &person.Telefonnummer, &person.Raum, &person.Funktion)
 	if err != nil {
@@ -62,4 +67,32 @@ func GetPerson(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, person)
+}
+
+// UpdatePerson updates an existing person in the database
+func UpdatePerson(c *gin.Context) {
+
+	personID := c.Param("id")
+	var updatedPerson models.Person
+
+	if personID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid person ID"})
+		return
+	}
+
+	err := c.ShouldBindJSON(&updatedPerson)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx := context.Background()
+	query := "UPDATE person SET titel = $1, vorname = $2, nachname = $3, email = $4, telefonnummer = $5, raum = $6, funktion = $7 WHERE person_id = $8"
+	_, execErr := database.DB.Exec(ctx, query, updatedPerson.Titel, updatedPerson.Vorname, updatedPerson.Nachname, updatedPerson.Email, updatedPerson.Telefonnummer, updatedPerson.Raum, updatedPerson.Funktion, personID)
+	if execErr != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": execErr.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedPerson)
 }

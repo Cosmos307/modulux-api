@@ -12,6 +12,7 @@ func PersonRoutes(router *gin.Engine) {
 	{
 		personGroup.GET("/", controller.GetPersons)
 		personGroup.GET("/:id", controller.GetPerson)
+		personGroup.PUT("/:id", controller.UpdatePerson)
 
 	}
 }
