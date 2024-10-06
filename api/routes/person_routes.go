@@ -14,6 +14,6 @@ func PersonRoutes(router *gin.Engine) {
 		personGroup.GET("/:id", controller.GetPerson)
 		personGroup.PUT("/:id", controller.UpdatePerson)
 		personGroup.POST("/", controller.CreatePerson)
-
+		personGroup.DELETE("/:id", controller.DeletePerson)
 	}
 }

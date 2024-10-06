@@ -73,6 +73,7 @@ func GetPerson(c *gin.Context) {
 func UpdatePerson(c *gin.Context) {
 
 	personID := c.Param("id")
+	ctx := context.Background()
 	var updatedPerson models.Person
 
 	if personID == "" {
@@ -86,7 +87,6 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 
-	ctx := context.Background()
 	query := "UPDATE person SET titel = $1, vorname = $2, nachname = $3, email = $4, telefonnummer = $5, raum = $6, funktion = $7 WHERE person_id = $8"
 	_, execErr := database.DB.Exec(ctx, query, updatedPerson.Titel, updatedPerson.Vorname, updatedPerson.Nachname, updatedPerson.Email, updatedPerson.Telefonnummer, updatedPerson.Raum, updatedPerson.Funktion, personID)
 	if execErr != nil {
@@ -117,4 +117,25 @@ func CreatePerson(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, newPerson)
+}
+
+// DeletePerson deletes a person from the database
+func DeletePerson(c *gin.Context) {
+
+	personID := c.Param("id")
+	ctx := context.Background()
+
+	if personID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid person ID"})
+		return
+	}
+
+	query := "DELETE FROM person WHERE person_id = $1"
+	_, execErr := database.DB.Exec(ctx, query, personID)
+	if execErr != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": execErr.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Person deleted"})
 }
