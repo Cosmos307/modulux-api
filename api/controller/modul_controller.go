@@ -128,3 +128,41 @@ func GetOpalLink(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"opal_link": opalLink.ValueOrZero()})
 }
+
+// UpdateModule updates an existing module in the database
+func UpdateModule(c *gin.Context) {
+
+	kuerzel := c.Param("kuerzel")
+	version := c.Param("version")
+	var updatedModule models.Module
+
+	if err := c.ShouldBindJSON(&updatedModule); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	query := `UPDATE modul SET frueherer_schluessel = $1, modultitel = $2, modultitel_englisch = $3, kommentar = $4, 
+	niveau = $5, dauer = $6, turnus = $7, studium_integrale = $8, sprachenzentrum = $9, 
+	opal_link = $10, gruppengroesse_vorlesung = $11, gruppengroesse_uebung = $12, gruppengroesse_praktikum = $13, 
+	lehrform = $14, medienform = $15, lehrinhalte = $16, qualifikationsziele = $17, sozial_und_selbstkompetenzen = $18, 
+	besondere_zulassungsvoraussetzungen = $19, empfohlene_voraussetzungen = $20, fortsetzungsmoeglichkeiten = $21, 
+	hinweise = $22, ects_credits = $23, workload = $24, praesenzeit_woche_vorlesung = $25, praesenzeit_woche_uebung = $26, 
+	praesenzeit_woche_praktikum = $27, praesenzeit_woche_sonstiges = $28, selbststudienzeit = $29, selbststudienzeit_aufschluesselung = $30, 
+	aktuelle_lehrressourcen = $31, literatur = $32, parent_modul_kuerzel = $33, parent_modul_version = $34, fakultaet_id = $35, 
+	studienrichtung_id = $36, vertiefung_id = $37 WHERE kuerzel = $38 AND version = $39`
+	_, err := database.DB.Exec(context.Background(), query,
+		updatedModule.FruehererSchluessel, updatedModule.Modultitel, updatedModule.ModultitelEnglisch, updatedModule.Kommentar,
+		updatedModule.Niveau, updatedModule.Dauer, updatedModule.Turnus, updatedModule.StudiumIntegrale, updatedModule.Sprachenzentrum,
+		updatedModule.OpalLink, updatedModule.GruppengroesseVorlesung, updatedModule.GruppengroesseUebung, updatedModule.GruppengroessePraktikum,
+		updatedModule.Lehrform, updatedModule.Medienform, updatedModule.Lehrinhalte, updatedModule.Qualifikationsziele, updatedModule.SozialUndSelbstkompetenzen,
+		updatedModule.BesondereZulassungsvoraussetzungen, updatedModule.EmpfohleneVoraussetzungen, updatedModule.Fortsetzungsmoeglichkeiten,
+		updatedModule.Hinweise, updatedModule.EctsCredits, updatedModule.Workload, updatedModule.PraesenzeitWocheVorlesung, updatedModule.PraesenzeitWocheUebung,
+		updatedModule.PraesenzeitWochePraktikum, updatedModule.PraesenzeitWocheSonstiges, updatedModule.Selbststudienzeit, updatedModule.SelbststudienzeitAufschluesselung,
+		updatedModule.AktuelleLehrressourcen, updatedModule.Literatur, updatedModule.ParentModulKuerzel, updatedModule.ParentModulVersion, updatedModule.FakultaetID,
+		updatedModule.StudienrichtungID, updatedModule.VertiefungID, kuerzel, version,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, updatedModule)
+}
