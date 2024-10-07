@@ -106,3 +106,25 @@ func GetOpalLinks(c *gin.Context) {
 
 	c.JSON(http.StatusOK, modules)
 }
+
+// GetOpalLink retrieves the opal link of a module by kuerzel and version from the database
+func GetOpalLink(c *gin.Context) {
+
+	kuerzel := c.Param("kuerzel")
+	version := c.Param("version")
+	var opalLink null.String
+
+	query := "SELECT opal_link FROM modul WHERE kuerzel = $1 AND version = $2"
+	err := database.DB.QueryRow(context.Background(), query, kuerzel, version).Scan(&opalLink)
+	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Module not found"})
+			return
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"opal_link": opalLink.ValueOrZero()})
+}

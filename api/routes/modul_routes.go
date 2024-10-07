@@ -13,5 +13,6 @@ func ModulRoutes(router *gin.Engine) {
 		moduleGroup.GET("/", controller.GetModules)
 		moduleGroup.GET("/:kuerzel/:version", controller.GetModule)
 		moduleGroup.GET("opal-links", controller.GetOpalLinks)
+		moduleGroup.GET("/:kuerzel/:version/opal-link", controller.GetOpalLink)
 	}
 }
