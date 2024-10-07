@@ -196,3 +196,18 @@ func CreateModule(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, newModule)
 }
+
+// DeleteModule deletes a module by kuerzel and version from the database
+func DeleteModule(c *gin.Context) {
+
+	kuerzel := c.Param("kuerzel")
+	version := c.Param("version")
+
+	query := "DELETE FROM modul WHERE kuerzel = $1 AND version = $2"
+	_, err := database.DB.Exec(context.Background(), query, kuerzel, version)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Module deleted successfully"})
+}
