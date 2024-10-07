@@ -44,3 +44,30 @@ func GetModules(c *gin.Context) {
 
 	c.JSON(http.StatusOK, modules)
 }
+
+// GetModule retrieves a module by kuerzel and version from the database
+func GetModule(c *gin.Context) {
+
+	kuerzel := c.Param("kuerzel")
+	version := c.Param("version")
+	var module models.Module
+
+	query := "SELECT * FROM modul WHERE kuerzel = $1 AND version = $2"
+	err := database.DB.QueryRow(context.Background(), query, kuerzel, version).Scan(
+		&module.Kuerzel, &module.Version, &module.FruehererSchluessel, &module.Modultitel, &module.ModultitelEnglisch,
+		&module.Kommentar, &module.Niveau, &module.Dauer, &module.Turnus, &module.StudiumIntegrale, &module.Sprachenzentrum,
+		&module.OpalLink, &module.GruppengroesseVorlesung, &module.GruppengroesseUebung, &module.GruppengroessePraktikum,
+		&module.Lehrform, &module.Medienform, &module.Lehrinhalte, &module.Qualifikationsziele, &module.SozialUndSelbstkompetenzen,
+		&module.BesondereZulassungsvoraussetzungen, &module.EmpfohleneVoraussetzungen, &module.Fortsetzungsmoeglichkeiten,
+		&module.Hinweise, &module.EctsCredits, &module.Workload, &module.PraesenzeitWocheVorlesung, &module.PraesenzeitWocheUebung,
+		&module.PraesenzeitWochePraktikum, &module.PraesenzeitWocheSonstiges, &module.Selbststudienzeit, &module.SelbststudienzeitAufschluesselung,
+		&module.AktuelleLehrressourcen, &module.Literatur, &module.ParentModulKuerzel, &module.ParentModulVersion, &module.FakultaetID,
+		&module.StudienrichtungID, &module.VertiefungID,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, module)
+}

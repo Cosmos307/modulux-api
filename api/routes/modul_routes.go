@@ -11,5 +11,6 @@ func ModulRoutes(router *gin.Engine) {
 	moduleGroup := router.Group("/modules")
 	{
 		moduleGroup.GET("/", controller.GetModules)
+		moduleGroup.GET("/:kuerzel/:version", controller.GetModule)
 	}
 }
