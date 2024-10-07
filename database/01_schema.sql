@@ -171,7 +171,6 @@ CREATE TABLE IF NOT EXISTS modul_studiengang (
     studiengang_id INT,
     semester INT,
     modul_typ modul_typ_enum NOT NULL,
-    semester INT NOT NULL,
     
     FOREIGN KEY (modul_kuerzel, modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE,
 
