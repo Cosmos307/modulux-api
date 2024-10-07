@@ -11,5 +11,9 @@ func PersonRoutes(router *gin.Engine) {
 	personGroup := router.Group("/persons")
 	{
 		personGroup.GET("/", controller.GetPersons)
+		personGroup.GET("/:id", controller.GetPerson)
+		personGroup.PUT("/:id", controller.UpdatePerson)
+		personGroup.POST("/", controller.CreatePerson)
+		personGroup.DELETE("/:id", controller.DeletePerson)
 	}
 }

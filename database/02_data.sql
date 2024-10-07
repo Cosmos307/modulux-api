@@ -18,11 +18,12 @@ VALUES
     ('Hanna', 'Brodowsky', NULL, 'hanna.brodowsky@htwk-leipzig.de', NULL, NULL, 'Dozentin'),
     ('Mario', 'Hlawitschka', 'Prof. Dr. rer. nat.', 'mario.hlawitschka@htwk-leipzig.de', '+49 341 3076-6493', 'ZU 224', 'Professor'),
     ('Martin', 'Grüttmüller', 'Prof. Dr. rer. nat. habil.', 'martin.gruettmueller@htwk-leipzig.de', '+49 341 3076-6487', 'ZU 412', 'Professor'),
-    ('Karsten', 'Weicker', 'Prof. Dr. rer. nat.', 'karsten.weicker@htwk-leipzig.de', '+49 341 3076-6395', 'ZU 410', 'Professor'),
+    ('Karsten', 'Weicker', 'Prof. Dr. rer. nat.', 'karsten-weicker@htwk-leipzig.de', '+49 341 3076-6395', 'ZU 410', 'Professor'),
     ('Thomas', 'Kudraß', 'Prof. Dr.-Ing.', 'thomas.kudrass@htwk-leipzig.de', '+49 341 3076-6420', 'ZU 130', 'Professor'),
     ('Thomas', 'Riechert', 'Prof. Dr. rer. nat.', 'thomas.riechert@htwk-leipzig.de', '+49 341 3076-6413', 'ZU 507', 'Professor'),
     ('Antje', 'Tober-Nietner', 'Dr.', 'antje.tober@htwk-leipzig.de', NULL, NULL, 'Dozentin'),
-    ('Johannes', 'Waldmann', 'Prof. Dr. rer. nat.', 'johannes.waldmann@htwk-leipzig.de', '+49 341 3076-6479', 'ZU 129', 'Professor');
+    ('Johannes', 'Waldmann', 'Prof. Dr. rer. nat.', 'johannes.waldmann@htwk-leipzig.de', '+49 341 3076-6479', 'ZU 129', 'Professor'),
+    ('Andreas', 'Both', 'Prof. Dr. rer. nat.', 'andreas.both@htwk-leipzig.de', '+49 341 3076-6256', 'ZU 529', 'Professor');
 
 -- Rollen 
 INSERT INTO rolle (bezeichnung)
@@ -53,62 +54,62 @@ VALUES
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'));
 
 INSERT INTO modul (
-    kuerzel,                     -- 1: Kürzel des Moduls
-    version,                     -- 2: Version des Moduls
-    frueherer_schluessel,        -- 2.5: frühere Nummer des Moduls
-    modultitel,                  -- 3: Titel des Moduls
-    modultitel_englisch,          -- 4: Englischer Titel des Moduls
-    kommentar,                   -- 5: Kommentar zum Modul
-    niveau,                      -- 6: Studienniveau
-    dauer,                       -- 7: Dauer in Semestern
-    turnus,                      -- 8: Turnus (z.B. Sommer, Winter)
-    studium_integrale,           -- 9: Ist das Modul Studium Integrale?
-    sprachenzentrum,             -- 10: Ist das Modul im Sprachenzentrum?
-    opal_link,                   -- 11: Link zu OPAL
-    gruppengroesse_vorlesung,     -- 12: Gruppengröße Vorlesung
-    gruppengroesse_uebung,        -- 13: Gruppengröße Übung
-    gruppengroesse_praktikum,     -- 14: Gruppengröße Praktikum
-    lehrform,                    -- 15: Lehrform
-    medienform,                  -- 16: Medienform
-    lehrinhalte,                 -- 17: Lehrinhalte
-    qualifikationsziele,         -- 18: Qualifikationsziele
-    sozial_und_selbstkompetenzen, -- 19: Soziale und Selbstkompetenzen
+    kuerzel,                        -- 1: Kürzel des Moduls
+    version,                        -- 2: Version des Moduls
+    frueherer_schluessel,           -- 2.5: frühere Nummer des Moduls
+    modultitel,                     -- 3: Titel des Moduls
+    modultitel_englisch,            -- 4: Englischer Titel des Moduls
+    kommentar,                      -- 5: Kommentar zum Modul
+    niveau,                         -- 6: Studienniveau
+    dauer,                          -- 7: Dauer in Semestern
+    turnus,                         -- 8: Turnus (z.B. Sommer, Winter)
+    studium_integrale,              -- 9: Ist das Modul Studium Integrale?
+    sprachenzentrum,                -- 10: Ist das Modul im Sprachenzentrum?
+    opal_link,                      -- 11: Link zu OPAL
+    gruppengroesse_vorlesung,       -- 12: Gruppengröße Vorlesung
+    gruppengroesse_uebung,          -- 13: Gruppengröße Übung
+    gruppengroesse_praktikum,       -- 14: Gruppengröße Praktikum
+    lehrform,                       -- 15: Lehrform
+    medienform,                     -- 16: Medienform
+    lehrinhalte,                    -- 17: Lehrinhalte
+    qualifikationsziele,            -- 18: Qualifikationsziele
+    sozial_und_selbstkompetenzen,   -- 19: Soziale und Selbstkompetenzen
     besondere_zulassungsvoraussetzungen, -- 20: Besondere Zulassungsvoraussetzungen
-    empfohlene_voraussetzungen,  -- 21: Empfohlene Voraussetzungen
-    fortsetzungsmoeglichkeiten,  -- 22: Fortsetzungsmöglichkeiten
-    hinweise,                    -- 23: Hinweise
-    ects_credits,                -- 24: ECTS Credits
-    praesenzeit_woche_vorlesung, -- 25: Präsenzzeit pro Woche in Vorlesung
-    praesenzeit_woche_uebung,    -- 26: Präsenzzeit pro Woche in Übung
-    praesenzeit_woche_praktikum, -- 27: Präsenzzeit pro Woche im Praktikum
-    praesenzeit_woche_sonstiges, -- 28: Präsenzzeit pro Woche in Sonstigem
+    empfohlene_voraussetzungen,     -- 21: Empfohlene Voraussetzungen
+    fortsetzungsmoeglichkeiten,     -- 22: Fortsetzungsmöglichkeiten
+    hinweise,                       -- 23: Hinweise
+    ects_credits,                   -- 24: ECTS Credits
+    praesenzeit_woche_vorlesung,    -- 25: Präsenzzeit pro Woche in Vorlesung
+    praesenzeit_woche_uebung,       -- 26: Präsenzzeit pro Woche in Übung
+    praesenzeit_woche_praktikum,    -- 27: Präsenzzeit pro Woche im Praktikum
+    praesenzeit_woche_sonstiges,    -- 28: Präsenzzeit pro Woche in Sonstigem
     selbststudienzeit_aufschluesselung, -- 29: Aufschlüsselung der Selbststudienzeit
-    aktuelle_lehrressourcen,     -- 30: Aktuelle Lehrressourcen
-    literatur,                   -- 31: Literatur
-    fakultaet_id,                -- 32: Fakultät ID
-    studienrichtung_id,          -- 33: Studienrichtung ID
-    vertiefung_id,               -- 34: Vertiefung ID
-    parent_modul_kuerzel,
-    parent_modul_version  
+    aktuelle_lehrressourcen,        -- 30: Aktuelle Lehrressourcen
+    literatur,                      -- 31: Literatur
+    fakultaet_id,                   -- 32: Fakultät ID
+    studienrichtung_id,             -- 33: Studienrichtung ID
+    vertiefung_id,                  -- 34: Vertiefung ID
+    parent_modul_kuerzel,           -- 35: parent_modul_kuerzel
+    parent_modul_version            -- 36: parent_modul_version
 )
 VALUES 
-(   'C114',                        -- 1: kuerzel NN
-    2,                             -- 2: version  NN
-    NULL,                          -- 2.5 frühere Nummer
-    'Modellierung',                -- 3: modultitel NN
-    'Modelling',                   -- 4: modultitel_englisch 
-    'Kommentar Modellierung',      -- 5: kommentar
-    'Bachelor',                    -- 6: niveau NN
-    1,                             -- 7: dauer
-    'Winter',                      -- 8: turnus
-    FALSE,                         -- 9: studium_integrale
-    FALSE,                         -- 10: sprachenzentrum
-    NULL,                          -- 11: opal_link (kein Wert)
-    120,                           -- 12: gruppengroesse_vorlesung
-    30,                            -- 13: gruppengroesse_uebung
-    NULL,                          -- 14: gruppengroesse_praktikum (kein Wert)
+(   'C114',                         -- 1: kuerzel NN
+    2,                              -- 2: version  NN
+    NULL,                           -- 2.5 frühere Nummer
+    'Modellierung',                 -- 3: modultitel NN
+    'Modelling',                    -- 4: modultitel_englisch 
+    'Kommentar Modellierung',       -- 5: kommentar
+    'Bachelor',                     -- 6: niveau NN
+    1,                              -- 7: dauer
+    'Winter',                       -- 8: turnus
+    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 10: sprachenzentrum
+    NULL,                           -- 11: opal_link (kein Wert)
+    120,                            -- 12: gruppengroesse_vorlesung
+    30,                             -- 13: gruppengroesse_uebung
+    NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
     'Vorlesung Übung Bearbeiten von Problemen und Lösungsfindung, Selbstudium anhand theoretischer und praktischer Übungsaufgaben', -- 15: lehrform
-    NULL,                          -- 16: medienform (kein Wert)
+    NULL,                           -- 16: medienform (kein Wert)
     'Modellierung und formale Darstellung von Daten durch Mengen; Mengenoperationen
     Zusammenhängen durch Relationen, Funktionen, Äquivalenz- Ordnungsrelationen, Graphen
     strukturierten Daten durch Wörter, Texte, Sprachen, Bäume, Signaturen, Terme, strukturelle Induktion, algebraische Strukturen
@@ -117,16 +118,16 @@ VALUES
     Abläufen und Berechnungen durch Zustandsübergangssysteme jeweils mit praktischen Modellierungsbeispielen;',  -- 17: lehrinhalte (gekürzt)
     'Die Studierenden können mathematische und logische Grundkonzepte zur Modellierung praktischer Aufgabenstellungen anwenden.
     Sie können Anforderungen an Software und Systeme formal beschreiben und wissen, dass deren Korrektheit mit formalen Methoden nachweisbar ist.', -- 18: qualifikationsziele (gekürzt)
-    NULL,                          -- 19: sozial_und_selbstkompetenzen (kein Wert)
-    NULL,                          -- 20: besondere_zulassungsvoraussetzungen (kein Wert)
+    NULL,                           -- 19: sozial_und_selbstkompetenzen (kein Wert)
+    NULL,                           -- 20: besondere_zulassungsvoraussetzungen (kein Wert)
     'Fertigkeiten in der Programmierung (derzeit C-Programmierung)',  -- 21: empfohlene_voraussetzungen (kein Wert)
-    NULL,                          -- 22: fortsetzungsmoeglichkeiten (kein Wert)
+    NULL,                           -- 22: fortsetzungsmoeglichkeiten (kein Wert)
     'regelmäßiges erfolgreiches Lösen der praktischen Übungsaufgaben (PVB) und 3 Kurzvorträge zu schriftlichen Übungsaufgaben (PVP)',  -- 23: hinweise
-    8.0,                           -- 24: ects_credits
-    4,                             -- 25: praesenzeit_woche_vorlesung
-    2,                             -- 26: praesenzeit_woche_uebung
-    0,                          -- 27: praesenzeit_woche_praktikum (kein Wert)
-    0,                          -- 28: praesenzeit_woche_sonstiges (kein Wert)
+    8.0,                            -- 24: ects_credits
+    4,                              -- 25: praesenzeit_woche_vorlesung
+    2,                              -- 26: praesenzeit_woche_uebung
+    0,                              -- 27: praesenzeit_woche_praktikum (kein Wert)
+    0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     '156 Stunden
     28 Stunden Vorbereitung Lehrveranstaltung
     28 Stunden E-Learning
@@ -138,14 +139,14 @@ VALUES
     U. Schöning: "Theoretische Informatik - kurzgefasst", Spektrum, in der aktuellen Auflage.
     M. Broy, R. Steinbrüggen: "Modellbildung in der Informatik", Springer, 2004', -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
-    NULL,                         -- 33: studienrichtung_id (kein Wert)
-    NULL,                         -- 34: vertiefung_id (kein Wert)
-    NULL,                          -- 35: parent_modul_kuerzel,
+    NULL,                           -- 33: studienrichtung_id (kein Wert)
+    NULL,                           -- 34: vertiefung_id (kein Wert)
+    NULL,                           -- 35: parent_modul_kuerzel,
     NULL                            -- parent_modul_version
 ),
-(   'C287',                        -- 1: kuerzel NN
-    3,                             -- 2: version  NN
-    NULL,                          -- 2.5 frühere Nummer
+(   'C287',                         -- 1: kuerzel NN
+    3,                              -- 2: version  NN
+    NULL,                           -- 2.5 frühere Nummer
     'Betriebssysteme und Rechnernetze', -- 3: modultitel NN
     'Operating Systems and Computer Networks', -- 4: modultitel_englisch 
     'Kommentar Betriebssysteme und Rechnernetze',      -- 5: kommentar
@@ -170,29 +171,29 @@ VALUES
     6.0,                            -- 24: ects_credits
     4,                              -- 25: praesenzeit_woche_vorlesung
     2,                              -- 26: praesenzeit_woche_uebung
-    0,                           -- 27: praesenzeit_woche_praktikum (kein Wert)
-    0,                           -- 28: praesenzeit_woche_sonstiges (kein Wert)
+    0,                              -- 27: praesenzeit_woche_praktikum (kein Wert)
+    0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
     NULL,                           -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
-    NULL,                         -- 33: studienrichtung_id (kein Wert)
-    NULL,                         -- 34: vertiefung_id (kein Wert)
-    NULL,                          -- 35: parent_modul_kuerzel,
+    NULL,                           -- 33: studienrichtung_id (kein Wert)
+    NULL,                           -- 34: vertiefung_id (kein Wert)
+    NULL,                           -- 35: parent_modul_kuerzel,
     NULL                            -- parent_modul_version
 ),
-(   'C287.1',                        -- 1: kuerzel NN
-    3,                             -- 2: version  NN
-    NULL,                          -- 2.5 frühere Nummer
-    'Betriebssysteme', -- 3: modultitel NN
-    'Operating Systems', -- 4: modultitel_englisch 
-    'Kommentar Betriebssysteme',      -- 5: kommentar
+(   'C287.1',                       -- 1: kuerzel NN
+    3,                              -- 2: version  NN
+    NULL,                           -- 2.5 frühere Nummer
+    'Betriebssysteme',              -- 3: modultitel NN
+    'Operating Systems',            -- 4: modultitel_englisch 
+    'Kommentar Betriebssysteme',    -- 5: kommentar
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
     FALSE,                          -- 9: studium_integrale
     FALSE,                          -- 10: sprachenzentrum
-    NULL,                           -- 11: opal_link (kein Wert)
+    'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/20425539587/CourseNode/99489065090706',    -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
     30,                             -- 13: gruppengroesse_uebung
     NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
@@ -227,8 +228,8 @@ VALUES
     3.0,                            -- 24: ects_credits
     2,                              -- 25: praesenzeit_woche_vorlesung
     1,                              -- 26: praesenzeit_woche_uebung
-    0,                           -- 27: praesenzeit_woche_praktikum (kein Wert)
-    0,                           -- 28: praesenzeit_woche_sonstiges (kein Wert)
+    0,                              -- 27: praesenzeit_woche_praktikum (kein Wert)
+    0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
     'W. Stallings: Operating Systems. Prentice Hall, New Jersey, 2003
@@ -236,23 +237,23 @@ VALUES
     M. Hailperin: "Operating Systems an Middleware, Supporting Controlled Intercation", CC BY-SA 3.0, Rev 1.3
     J. Plötner, S. Wendzel: "Linux - Das umfassende Handbuch", Rheinwerk Computing, 2012', -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
-    NULL,                         -- 33: studienrichtung_id (kein Wert)
-    NULL,                         -- 34: vertiefung_id (kein Wert)
-    'C287',                          -- 35: parent_modul_kuerzel,
-    3                            -- parent_modul_version
+    NULL,                           -- 33: studienrichtung_id (kein Wert)
+    NULL,                           -- 34: vertiefung_id (kein Wert)
+    'C287',                         -- 35: parent_modul_kuerzel,
+    3                               -- parent_modul_version
 ),
-(   'C287.2',                        -- 1: kuerzel NN
-    3,                             -- 2: version  NN
-    NULL,                          -- 2.5 frühere Nummer
-    'Rechnernetze', -- 3: modultitel NN
-    'Computer Networks', -- 4: modultitel_englisch 
-    'Kommentar Rechnernetze',      -- 5: kommentar
+(   'C287.2',                       -- 1: kuerzel NN
+    3,                              -- 2: version  NN
+    NULL,                           -- 2.5 frühere Nummer
+    'Rechnernetze',                 -- 3: modultitel NN
+    'Computer Networks',            -- 4: modultitel_englisch 
+    'Kommentar Rechnernetze',       -- 5: kommentar
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
     FALSE,                          -- 9: studium_integrale
     FALSE,                          -- 10: sprachenzentrum
-    NULL,                           -- 11: opal_link (kein Wert)
+    'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/20425539587/CourseNode/99489065090706',                           -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
     30,                             -- 13: gruppengroesse_uebung
     NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
@@ -277,7 +278,7 @@ VALUES
         Internet Protocol (v4, v6, vX)
         IEEE 802-Technologien
         Virtualisierung, SDN, OpenFlow
-        Carrier Ethernet, GMPLS',  -- 17: lehrinhalte (gekürzt)
+        Carrier Ethernet, GMPLS',   -- 17: lehrinhalte (gekürzt)
     'Es besteht detailliertes, anwendungsfähiges Fachwissen auf dem Gebiet der Netzwerktechnologien, Strukturen und deren Grundprinzipien. Aufsetzend auf dem Verständnis der Grundprinzipien sowie der erworbenen praktischen Fähigkeiten sind sie in der Lage veränderte Methoden und Trends zu erkennen und deren Potential gegenüber etablierten Technologien zu ermitteln.',                           -- 18: qualifikationsziele (gekürzt)
     NULL,                           -- 19: sozial_und_selbstkompetenzen (kein Wert)
     NULL,                           -- 20: besondere_zulassungsvoraussetzungen (kein Wert)
@@ -287,8 +288,8 @@ VALUES
     3.0,                            -- 24: ects_credits
     2,                              -- 25: praesenzeit_woche_vorlesung
     1,                              -- 26: praesenzeit_woche_uebung
-    0,                           -- 27: praesenzeit_woche_praktikum (kein Wert)
-    0,                           -- 28: praesenzeit_woche_sonstiges (kein Wert)
+    0,                              -- 27: praesenzeit_woche_praktikum (kein Wert)
+    0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
     'P. L. Dordal: "An Introduction to Computer Networks", CC BY-NC-ND 3.0, 2019.
@@ -298,11 +299,113 @@ VALUES
     T. Nadeu, K. Gray: "SDN: Software Defined Networks", O`Reilly, 2013.
     „Ethernet“, Heise Verlag, 2008.', -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
-    NULL,                         -- 33: studienrichtung_id (kein Wert)
-    NULL,                         -- 34: vertiefung_id (kein Wert)
-    'C287',                          -- 35: parent_modul_kuerzel,
-    3                            -- parent_modul_version
+    NULL,                           -- 33: studienrichtung_id (kein Wert)
+    NULL,                           -- 34: vertiefung_id (kein Wert)
+    'C287',                         -- 35: parent_modul_kuerzel,
+    3                               -- parent_modul_version
+), -- ------------------------------
+(   'C073',                         -- 1: kuerzel NN
+    0,                              -- 2: version  NN
+    NULL,                           -- 2.5 frühere Nummer
+    'Softwareprojekt I',            -- 3: modultitel NN
+    'Software Engineering Project I',                   -- 4: modultitel_englisch 
+    'Kommentar Softwareprojekt I',      -- 5: kommentar
+    'Bachelor',                     -- 6: niveau NN
+    1,                              -- 7: dauer
+    'Sommer',                       -- 8: turnus
+    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 10: sprachenzentrum
+    'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/39268417537/CourseNode/77094584712802', -- 11: opal_link (kein Wert)
+    120,                            -- 12: gruppengroesse_vorlesung
+    30,                             -- 13: gruppengroesse_uebung
+    NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
+    'Begleitende Inputs werden als Vorlesung präsentiert
+    Die Projekte werden in Teams selbstorganisiert bearbeitet
+    ausgewählte Meetings und Zwischenstandspräsentationen werden duch die Betreuer organisiert und abgenommen', -- 15: lehrform
+    NULL,                           -- 16: medienform (kein Wert)
+    'Vorstellung der Anforderungen
+    Teambildung
+    Erstellung einer Anforderungsspezifikation und einer Architekturvision mit Präsentationen an Meilensteinen
+    Erstellung einer produktiv einsetzbaren ersten Version der Software mit Präsentationen an Meilensteinen: erste Funktionalitäten sollten enthalten sein und prototypisch eine Vision für die Nutzungsoberfläche der gesamten Software vorhanden sein',  -- 17: lehrinhalte (gekürzt)
+    'Die Studierenden können mathematische und logische Grundkonzepte zur Modellierung praktischer Aufgabenstellungen anwenden.
+    Sie können Anforderungen an Software und Systeme formal beschreiben und wissen, dass deren Korrektheit mit formalen Methoden nachweisbar ist.', -- 18: qualifikationsziele (gekürzt)
+    NULL,                           -- 19: sozial_und_selbstkompetenzen (kein Wert)
+    NULL,                           -- 20: besondere_zulassungsvoraussetzungen (kein Wert)
+    'Kompetenzen der Softwaretechnik und der Programmierung sollten soweit vorhanden sein, dass kleine Programme mit graphischer Benutzeroberfläche erstellt werden können)',  -- 21: empfohlene_voraussetzungen (kein Wert)
+    NULL,                           -- 22: fortsetzungsmoeglichkeiten (kein Wert)
+    NULL,                           -- 23: hinweise
+    5.0,                            -- 24: ects_credits
+    1,                              -- 25: praesenzeit_woche_vorlesung
+    0,                              -- 26: praesenzeit_woche_uebung
+    1,                              -- 27: praesenzeit_woche_praktikum (kein Wert)
+    0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
+    NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
+    NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
+    'J. Ludewig, H. Lichter: "Software Engineering", dpunkt, in der aktuellen Auflage.
+    C. Rupp et al.: "UML 2 glasklar. Praxiswissen für die UML-Modellierung", Hanser, in der aktuellen Auflage.
+    H. Kellner: "Soziale Kompetenz für Ingenieure, Informatiker und Naturwissenschaftler", Hanser,2006.
+    U. Vigenschow, B. Schneider: "Soft Skills für Softwareentwickler", dpunkt, in der aktuellen Auflage.
+    R. Pichler: "Scrum - Agiles Projektmanagement erfolgreich einsetzen", dpunkt, 2007.', -- 31: literatur (gekürzt)
+    (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
+    NULL,                           -- 33: studienrichtung_id (kein Wert)
+    NULL,                           -- 34: vertiefung_id (kein Wert)
+    NULL,                           -- 35: parent_modul_kuerzel,
+    NULL                            -- parent_modul_version
+),
+(   'C171',                         -- 1: kuerzel NN
+    0,                              -- 2: version  NN
+    NULL,                           -- 2.5 frühere Nummer
+    'Softwareprojekt II',           -- 3: modultitel NN
+    'Software Engineering Project II', -- 4: modultitel_englisch 
+    'Kommentar Softwareprojekt II',      -- 5: kommentar
+    'Bachelor',                     -- 6: niveau NN
+    1,                              -- 7: dauer
+    'Winter',                       -- 8: turnus
+    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 10: sprachenzentrum
+    'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/41558605824?24', -- 11: opal_link (kein Wert)
+    120,                            -- 12: gruppengroesse_vorlesung
+    30,                             -- 13: gruppengroesse_uebung
+    NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
+    'begleitende Vorlesung mit Impulsreferaten
+    Abschlussveranstaltungen inklusive kleiner Produktmesse
+    Softwareentwicklung findet selbstorganisiert statt
+    bei Meetings und Zwischenstandspräsentationen hospitieren die Betreuer',   -- 15: lehrform
+    NULL,                           -- 16: medienform (kein Wert)
+    'Erstellung einer Anforderungsspezifikation und einer Architekturvision mit Präsentationen an mehreren Meilensteinen
+    Erstellung einer produktiv einsetzbaren Software mit Präsentationen an mehreren Meilensteinen
+    Poster-Abschlusspräsentation
+    Abschlusspräsentation als Vortrag',                           -- 17: lehrinhalte (gekürzt)
+    'Studierende sind in der Lage ein in einem agilen Vorgehensmodell ein bestehendes Softwareentwicklungsprojekt fortzuführen und erfolgreich zu beenden, dass dem Kunden ein (zumindest partiell) funktionsfähiges Produkt ausgeliefert werden kann.
+    Sie können fremden Quelltext lesen, darin Entwurfskonzepte erkennen sowie Änderungen durchführen. Sie erkennen selbständig Schnittstellen zu den Arbeitspaketen anderer Teammitglieder, können die Probleme benennen und selbständig Absprachen durchführen.
+    Insbesondere sind sie in der Lage Teilmodule zu entwerfen und im Rahmen der Gesamtsoftware umzusetzen. Innerhalb des Projektkontexts beherrschen sie erfolgreich Strategien zur Qualitätssicherung, d.h. Fehlermanagement, Uni-Tests und Reviews. Die Qualität von Artefakten kann im Rahmen von Reviews beurteilt werden. Darüber hinaus werden im Projektkontext Probleme hinsichtlich der Planung und Durchführbarkeit erkannt sowie Maßnahmen vorgeschlagen.',  -- 18: qualifikationsziele (gekürzt)
+    NULL,                           -- 19: sozial_und_selbstkompetenzen (kein Wert)
+    NULL,                           -- 20: besondere_zulassungsvoraussetzungen (kein Wert)
+    'Der Besuch des Softwareprojekts I im vorherigen Semester ist dringend anzuraten, da die Teams und die Projekte fortgeführt werden. Andernfalls ist der Arbeitsaufwand für die Einarbeitung ungleich höher.
+    Analog zu "Softwareprojekt I" werden auch hier hinreichend ausgeprägte Programmier- und Softwareentwicklungskompetenzen erwartet.',                           -- 21: empfohlene_voraussetzungen (kein Wert)
+    NULL,                           -- 22: fortsetzungsmoeglichkeiten (kein Wert)
+    NULL,                           -- 23: hinweise
+    5.0,                            -- 24: ects_credits
+    0.5,                            -- 25: praesenzeit_woche_vorlesung
+    0,                              -- 26: praesenzeit_woche_uebung
+    1,                              -- 27: praesenzeit_woche_praktikum (kein Wert)
+    0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
+    NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
+    NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
+    'J. Ludewig, H. Lichter: "Software Engineering", dpunkt, in der aktuellen Auflage.
+    C. Rupp et al.: "UML 2 glasklar. Praxiswissen für die UML-Modellierung", Hanser, in der aktuellen Auflage.
+    H. Kellner: "Soziale Kompetenz für Ingenieure, Informatiker und Naturwissenschaftler", Hanser, 2006.
+    U. Vigenschow, B. Schneider: "Soft Skills für Softwareentwickler", dpunkt, in der aktuellen Auflage.
+    R. Pichler: "Scrum - Agiles Projektmanagement erfolgreich einsetzen", dpunkt, 2007.',  -- 31: literatur (gekürzt)
+    (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
+    NULL,                           -- 33: studienrichtung_id (kein Wert)
+    NULL,                           -- 34: vertiefung_id (kein Wert)
+    NULL,                           -- 35: parent_modul_kuerzel,
+    NULL                            -- parent_modul_version
 );
+
+INSERT INTO modul_voraussetzung (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version)
+VALUES('C171', 0, 'C073', 0);
 
 -- Modulverantwortliche & Dozenten
 -- Modellierung
@@ -313,11 +416,8 @@ VALUES
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher')),
     ('C114', 2, 
     (SELECT person_id FROM person WHERE email = 'sibylle.schwarz@htwk-leipzig.de'), 
-    (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Dozent'));
-
--- Betriebssysteme und Rechnernetze 
-INSERT INTO modul_person_rolle (modul_kuerzel, modul_version, person_id, rolle_id)
-VALUES 
+    (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Dozent')),
+    -- Betriebssysteme und Rechnernetze 
     ('C287', 3, 
     (SELECT person_id FROM person WHERE email = 'jean-alexander.mueller@htwk-leipzig.de'), 
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher')),
@@ -332,16 +432,32 @@ VALUES
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher')),
     ('C287.2', 3,  
     (SELECT person_id FROM person WHERE email = 'jean-alexander.mueller@htwk-leipzig.de'), 
+    (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Dozent')),
+    ('C073', 0,    -- Softwareprojekt I
+    (SELECT person_id FROM person WHERE email = 'karsten-weicker@htwk-leipzig.de'),
+    (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher')),
+    ('C073', 0, 
+    (SELECT person_id FROM person WHERE email = 'andreas.both@htwk-leipzig.de'),
+    (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Dozent')),
+    ('C171', 0,    -- Softwareprojekt II
+    (SELECT person_id FROM person WHERE email = 'karsten-weicker@htwk-leipzig.de'),
+    (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher')),
+    ('C171', 0, 
+    (SELECT person_id FROM person WHERE email = 'karsten-weicker@htwk-leipzig.de'),
     (SELECT rolle_id FROM rolle WHERE bezeichnung = 'Dozent'));
 
 -- Zuordnung der Module zu Studiengängen
-INSERT INTO modul_studiengang (modul_kuerzel, modul_version, studiengang_id, semester ,modul_typ)
+INSERT INTO modul_studiengang (modul_kuerzel, modul_version, studiengang_id, modul_typ, semester)
 VALUES
-    ('C114', 2, 1, 1, 'Pflichtmodul'),  -- Modellierung
-    ('C114', 2, 2, 1, 'Pflichtmodul'),
-    ('C287', 3, 1, 3, 'Pflichtmodul'),  -- Betriebssysteme und Rechnernetze
-    ('C287', 3, 2, 3, 'Pflichtmodul'),
-    ('C287.1', 3, 1, 3, 'Pflichtmodul'), -- Betriebssysteme
-    ('C287.1', 3, 2, 3, 'Pflichtmodul'),
-    ('C287.2', 3, 1, 3, 'Pflichtmodul'), -- Rechnernetze
-    ('C287.2', 3, 2, 3, 'Pflichtmodul');
+    ('C114', 2, 1, 'Pflichtmodul', 1),  -- Modellierung
+    ('C114', 2, 2, 'Pflichtmodul', 1),
+    ('C287', 3, 1, 'Pflichtmodul', 3),  -- Betriebssysteme und Rechnernetze
+    ('C287', 3, 2, 'Pflichtmodul', 3),
+    ('C287.1', 3, 1, 'Pflichtmodul', 3), -- Betriebssysteme
+    ('C287.1', 3, 2, 'Pflichtmodul', 3),
+    ('C287.2', 3, 1, 'Pflichtmodul', 3), -- Rechnernetze
+    ('C287.2', 3, 2, 'Pflichtmodul', 3),
+    ('C073', 0, 1, 'Pflichtmodul', 4),  -- Softwareprojekt I
+    ('C073', 0, 2, 'Pflichtmodul', 4),
+    ('C171', 0, 1, 'Pflichtmodul', 5),  -- Softwareprojekt II
+    ('C171', 0, 2, 'Pflichtmodul', 5);
