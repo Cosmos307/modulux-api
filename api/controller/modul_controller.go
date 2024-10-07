@@ -166,3 +166,33 @@ func UpdateModule(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, updatedModule)
 }
+
+// CreateModule creates a new module in the database
+func CreateModule(c *gin.Context) {
+
+	var newModule models.Module
+
+	if err := c.ShouldBindJSON(&newModule); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	query := `INSERT INTO modul (kuerzel, version, frueherer_schluessel, modultitel, modultitel_englisch, kommentar, niveau, dauer, turnus, studium_integrale, sprachenzentrum, opal_link, gruppengroesse_vorlesung, gruppengroesse_uebung, gruppengroesse_praktikum, lehrform, medienform, lehrinhalte, qualifikationsziele, sozial_und_selbstkompetenzen, besondere_zulassungsvoraussetzungen, empfohlene_voraussetzungen, fortsetzungsmoeglichkeiten, hinweise, ects_credits, workload, praesenzeit_woche_vorlesung, praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, literatur, parent_modul_kuerzel, parent_modul_version, fakultaet_id, studienrichtung_id, vertiefung_id) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38)`
+	_, err := database.DB.Exec(context.Background(), query,
+		newModule.Kuerzel, newModule.Version, newModule.FruehererSchluessel, newModule.Modultitel, newModule.ModultitelEnglisch,
+		newModule.Kommentar, newModule.Niveau, newModule.Dauer, newModule.Turnus, newModule.StudiumIntegrale, newModule.Sprachenzentrum,
+		newModule.OpalLink, newModule.GruppengroesseVorlesung, newModule.GruppengroesseUebung, newModule.GruppengroessePraktikum,
+		newModule.Lehrform, newModule.Medienform, newModule.Lehrinhalte, newModule.Qualifikationsziele, newModule.SozialUndSelbstkompetenzen,
+		newModule.BesondereZulassungsvoraussetzungen, newModule.EmpfohleneVoraussetzungen, newModule.Fortsetzungsmoeglichkeiten,
+		newModule.Hinweise, newModule.EctsCredits, newModule.Workload, newModule.PraesenzeitWocheVorlesung, newModule.PraesenzeitWocheUebung,
+		newModule.PraesenzeitWochePraktikum, newModule.PraesenzeitWocheSonstiges, newModule.Selbststudienzeit, newModule.SelbststudienzeitAufschluesselung,
+		newModule.AktuelleLehrressourcen, newModule.Literatur, newModule.ParentModulKuerzel, newModule.ParentModulVersion, newModule.FakultaetID,
+		newModule.StudienrichtungID, newModule.VertiefungID,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, newModule)
+}
