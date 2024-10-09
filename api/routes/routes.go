@@ -11,6 +11,7 @@ func SetupRouter() *gin.Engine {
 	PersonRoutes(r)
 	ModulRoutes(r)
 	StudiengangRoutes(r)
+	ModulStudiengangRoutes(r)
 
 	// Ping route for testing
 	r.GET("/ping", func(c *gin.Context) {
