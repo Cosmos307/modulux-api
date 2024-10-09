@@ -7,9 +7,10 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// Load person routes
+	// Routes
 	PersonRoutes(r)
 	ModulRoutes(r)
+	StudiengangRoutes(r)
 
 	// Ping route for testing
 	r.GET("/ping", func(c *gin.Context) {
