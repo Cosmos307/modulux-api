@@ -140,9 +140,7 @@ CREATE TABLE IF NOT EXISTS modul_voraussetzung (
     vorausgesetztes_modul_version INT,
 
     PRIMARY KEY (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version),
-
     FOREIGN KEY (modul_kuerzel, modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE,
-
     FOREIGN KEY (vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE
 );
 
