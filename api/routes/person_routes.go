@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"modulux/api/controller"
+	"modulux/api/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,10 +10,10 @@ func PersonRoutes(router *gin.Engine) {
 
 	personGroup := router.Group("/persons")
 	{
-		personGroup.GET("/", controller.GetPersons)
-		personGroup.GET("/:id", controller.GetPerson)
-		personGroup.PUT("/:id", controller.UpdatePerson)
-		personGroup.POST("/", controller.CreatePerson)
-		personGroup.DELETE("/:id", controller.DeletePerson)
+		personGroup.GET("/", controllers.GetPersons)
+		personGroup.GET("/:id", controllers.GetPerson)
+		personGroup.PUT("/:id", controllers.UpdatePerson)
+		personGroup.POST("/", controllers.CreatePerson)
+		personGroup.DELETE("/:id", controllers.DeletePerson)
 	}
 }
