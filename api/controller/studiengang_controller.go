@@ -107,3 +107,29 @@ func UpdateStudiengang(c *gin.Context) {
 
 	c.JSON(http.StatusOK, updatedStudiengang)
 }
+
+// CreateStudiengang creates a new studiengang in the database
+func CreateStudiengang(c *gin.Context) {
+
+	var newStudiengang models.Studiengang
+	if err := c.ShouldBindJSON(&newStudiengang); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	query := `INSERT INTO studiengang (kuerzel, nummern_im_studienablaufplan, studiengangstitel, studiengangstitel_englisch, kommentar, abschluss, erste_immatrikulation, erforderliche_credits, kapazitaet, in_vollzeit_studierbar, in_teilzeit_studierbar, kooperativer_studiengang, doppelabschlussprogramm, fernstudium, englischsprachig, teasertext, mobilitaetsfenster, website, imagefilm, werbeflyer, akkreditierungsurkunde, fakultaet_id) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22) RETURNING studiengang_id`
+	err := database.DB.QueryRow(context.Background(), query,
+		newStudiengang.Kuerzel, newStudiengang.NummernImStudienablaufplan, newStudiengang.Studiengangstitel, newStudiengang.StudiengangstitelEnglisch,
+		newStudiengang.Kommentar, newStudiengang.Abschluss, newStudiengang.ErsteImmatrikulation, newStudiengang.ErforderlicheCredits,
+		newStudiengang.Kapazitaet, newStudiengang.InVollzeitStudierbar, newStudiengang.InTeilzeitStudierbar, newStudiengang.KooperativerStudiengang,
+		newStudiengang.Doppelabschlussprogramm, newStudiengang.Fernstudium, newStudiengang.Englischsprachig, newStudiengang.Teasertext,
+		newStudiengang.Mobilitaetsfenster, newStudiengang.Website, newStudiengang.Imagefilm, newStudiengang.Werbeflyer, newStudiengang.Akkreditierungsurkunde,
+		newStudiengang.FakultaetID).Scan(&newStudiengang.StudiengangID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, newStudiengang)
+}
