@@ -11,6 +11,7 @@ func StudiengangRoutes(router *gin.Engine) {
 	studiengangGroup := router.Group("/studiengaenge")
 	{
 		studiengangGroup.GET("/", controller.GetStudiengaenge)
+		studiengangGroup.GET("/:id", controller.GetStudiengang)
 
 	}
 }
