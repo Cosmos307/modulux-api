@@ -5,6 +5,7 @@ import (
 	"modulux/database"
 	"modulux/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/guregu/null"
@@ -50,11 +51,16 @@ func GetModules(c *gin.Context) {
 func GetModule(c *gin.Context) {
 
 	kuerzel := c.Param("kuerzel")
-	version := c.Param("version")
+	versionStr := c.Param("version")
+	version, err := strconv.Atoi(versionStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
+		return
+	}
 	var module models.Module
 
 	query := "SELECT * FROM modul WHERE kuerzel = $1 AND version = $2"
-	err := database.DB.QueryRow(context.Background(), query, kuerzel, version).Scan(
+	err = database.DB.QueryRow(context.Background(), query, kuerzel, version).Scan(
 		&module.Kuerzel, &module.Version, &module.FruehererSchluessel, &module.Modultitel, &module.ModultitelEnglisch,
 		&module.Kommentar, &module.Niveau, &module.Dauer, &module.Turnus, &module.StudiumIntegrale, &module.Sprachenzentrum,
 		&module.OpalLink, &module.GruppengroesseVorlesung, &module.GruppengroesseUebung, &module.GruppengroessePraktikum,
@@ -111,11 +117,16 @@ func GetOpalLinks(c *gin.Context) {
 func GetOpalLink(c *gin.Context) {
 
 	kuerzel := c.Param("kuerzel")
-	version := c.Param("version")
+	versionStr := c.Param("version")
+	version, err := strconv.Atoi(versionStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
+		return
+	}
 	var opalLink null.String
 
 	query := "SELECT opal_link FROM modul WHERE kuerzel = $1 AND version = $2"
-	err := database.DB.QueryRow(context.Background(), query, kuerzel, version).Scan(&opalLink)
+	err = database.DB.QueryRow(context.Background(), query, kuerzel, version).Scan(&opalLink)
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Module not found"})
@@ -133,13 +144,20 @@ func GetOpalLink(c *gin.Context) {
 func UpdateModule(c *gin.Context) {
 
 	kuerzel := c.Param("kuerzel")
-	version := c.Param("version")
-	var updatedModule models.Module
 
+	versionStr := c.Param("version")
+	version, err := strconv.Atoi(versionStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
+		return
+	}
+
+	var updatedModule models.Module
 	if err := c.ShouldBindJSON(&updatedModule); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	query := `UPDATE modul SET frueherer_schluessel = $1, modultitel = $2, modultitel_englisch = $3, kommentar = $4, 
 	niveau = $5, dauer = $6, turnus = $7, studium_integrale = $8, sprachenzentrum = $9, 
 	opal_link = $10, gruppengroesse_vorlesung = $11, gruppengroesse_uebung = $12, gruppengroesse_praktikum = $13, 
@@ -149,7 +167,7 @@ func UpdateModule(c *gin.Context) {
 	praesenzeit_woche_praktikum = $27, praesenzeit_woche_sonstiges = $28, selbststudienzeit = $29, selbststudienzeit_aufschluesselung = $30, 
 	aktuelle_lehrressourcen = $31, literatur = $32, parent_modul_kuerzel = $33, parent_modul_version = $34, fakultaet_id = $35, 
 	studienrichtung_id = $36, vertiefung_id = $37 WHERE kuerzel = $38 AND version = $39`
-	_, err := database.DB.Exec(context.Background(), query,
+	_, err = database.DB.Exec(context.Background(), query,
 		updatedModule.FruehererSchluessel, updatedModule.Modultitel, updatedModule.ModultitelEnglisch, updatedModule.Kommentar,
 		updatedModule.Niveau, updatedModule.Dauer, updatedModule.Turnus, updatedModule.StudiumIntegrale, updatedModule.Sprachenzentrum,
 		updatedModule.OpalLink, updatedModule.GruppengroesseVorlesung, updatedModule.GruppengroesseUebung, updatedModule.GruppengroessePraktikum,
@@ -201,10 +219,15 @@ func CreateModule(c *gin.Context) {
 func DeleteModule(c *gin.Context) {
 
 	kuerzel := c.Param("kuerzel")
-	version := c.Param("version")
+	versionStr := c.Param("version")
+	version, err := strconv.Atoi(versionStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
+		return
+	}
 
 	query := "DELETE FROM modul WHERE kuerzel = $1 AND version = $2"
-	_, err := database.DB.Exec(context.Background(), query, kuerzel, version)
+	_, err = database.DB.Exec(context.Background(), query, kuerzel, version)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
