@@ -133,3 +133,23 @@ func CreateStudiengang(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, newStudiengang)
 }
+
+// DeleteStudiengang deletes a studiengang by ID from the database
+func DeleteStudiengang(c *gin.Context) {
+
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID parameter must be a valid integer"})
+		return
+	}
+
+	query := "DELETE FROM studiengang WHERE studiengang_id = $1"
+	_, err = database.DB.Exec(context.Background(), query, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Studiengang deleted successfully"})
+}

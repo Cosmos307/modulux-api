@@ -14,5 +14,6 @@ func StudiengangRoutes(router *gin.Engine) {
 		studiengangGroup.GET("/:id", controller.GetStudiengang)
 		studiengangGroup.PUT("/:id/", controller.UpdateStudiengang)
 		studiengangGroup.POST("/", controller.CreateStudiengang)
+		studiengangGroup.DELETE("/:id", controller.DeleteStudiengang)
 	}
 }

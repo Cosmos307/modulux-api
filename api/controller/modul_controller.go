@@ -233,5 +233,5 @@ func DeleteModule(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Module deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Modul deleted successfully"})
 }
