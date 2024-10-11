@@ -11,7 +11,7 @@ func ModulVoraussetzungRoutes(router *gin.Engine) {
 	{
 		modulVoraussetzung.GET("/", controllers.GetAllModulVoraussetzungen)
 		modulVoraussetzung.GET("/:modul_kuerzel/:modul_version", controllers.GetModulVoraussetzungen)
-		modulVoraussetzung.POST("/:modul_kuerzel/:modul_version/:vorausgesetztes_modul_kuerzel/:vorausgesetztes_modul_version", controllers.CreateModulVoraussetzung)
+		modulVoraussetzung.POST("/", controllers.CreateModulVoraussetzung)
 		modulVoraussetzung.DELETE("/:modul_kuerzel/:modul_version/:vorausgesetztes_modul_kuerzel/:vorausgesetztes_modul_version", controllers.DeleteModulVoraussetzung)
 	}
 }

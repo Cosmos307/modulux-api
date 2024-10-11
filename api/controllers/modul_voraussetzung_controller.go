@@ -80,21 +80,9 @@ func GetModulVoraussetzungen(c *gin.Context) {
 
 // CreateModulVoraussetzung creates a new modul voraussetzung in the database
 func CreateModulVoraussetzung(c *gin.Context) {
-
-	modulKuerzel := c.Param("modul_kuerzel")
-	modulVersionStr := c.Param("modul_version")
-	vorausgesetztesModulKuerzel := c.Param("vorausgesetztes_modul_kuerzel")
-	vorausgesetztesModulVersionStr := c.Param("vorausgesetztes_modul_version")
-
-	modulVersion, err := strconv.Atoi(modulVersionStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid modulVersion"})
-		return
-	}
-
-	vorausgesetztesModulVersion, err := strconv.Atoi(vorausgesetztesModulVersionStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid vorausgesetztesModulVersion"})
+	var newVoraussetzung models.ModulVoraussetzung
+	if err := c.ShouldBindJSON(&newVoraussetzung); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
 	}
 
@@ -106,8 +94,8 @@ func CreateModulVoraussetzung(c *gin.Context) {
               WHERE ms1.modul_kuerzel = $1 AND ms1.modul_version = $2
               AND ms2.modul_kuerzel = $3 AND ms2.modul_version = $4`
 	rows, err := database.DB.Query(context.Background(), query,
-		modulKuerzel, modulVersion,
-		vorausgesetztesModulKuerzel, vorausgesetztesModulVersion)
+		newVoraussetzung.ModulKuerzel, newVoraussetzung.ModulVersion,
+		newVoraussetzung.VorausgesetztesModulKuerzel, newVoraussetzung.VorausgesetztesModulVersion)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving semester information for the modules"})
 		return
@@ -128,11 +116,11 @@ func CreateModulVoraussetzung(c *gin.Context) {
 		if vorausgesetztesModulSemester >= modulSemester {
 			problemModules = append(problemModules, gin.H{
 				"studiengang_id":                 studiengangID,
-				"modul_kuerzel":                  modulKuerzel,
-				"modul_version":                  modulVersion,
+				"modul_kuerzel":                  newVoraussetzung.ModulKuerzel,
+				"modul_version":                  newVoraussetzung.ModulVersion,
 				"modul_semester":                 modulSemester,
-				"vorausgesetztes_modul_kuerzel":  vorausgesetztesModulKuerzel,
-				"vorausgesetztes_modul_version":  vorausgesetztesModulVersion,
+				"vorausgesetztes_modul_kuerzel":  newVoraussetzung.VorausgesetztesModulKuerzel,
+				"vorausgesetztes_modul_version":  newVoraussetzung.VorausgesetztesModulVersion,
 				"vorausgesetztes_modul_semester": vorausgesetztesModulSemester,
 			})
 		}
@@ -150,19 +138,13 @@ func CreateModulVoraussetzung(c *gin.Context) {
 	query = `INSERT INTO modul_voraussetzung (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version) 
     VALUES ($1, $2, $3, $4)`
 	_, err = database.DB.Exec(context.Background(), query,
-		modulKuerzel, modulVersion, vorausgesetztesModulKuerzel, vorausgesetztesModulVersion,
-	)
+		newVoraussetzung.ModulKuerzel, newVoraussetzung.ModulVersion, newVoraussetzung.VorausgesetztesModulKuerzel, newVoraussetzung.VorausgesetztesModulVersion)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"modul_kuerzel":                 modulKuerzel,
-		"modul_version":                 modulVersion,
-		"vorausgesetztes_modul_kuerzel": vorausgesetztesModulKuerzel,
-		"vorausgesetztes_modul_version": vorausgesetztesModulVersion,
-	})
+	c.JSON(http.StatusCreated, newVoraussetzung)
 }
 
 // DeleteModulVoraussetzung deletes a modul voraussetzung by modul kuerzel and version from the database
@@ -178,7 +160,6 @@ func DeleteModulVoraussetzung(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Modul version parameter must be a valid integer"})
 		return
 	}
-
 	vorausgesetztesModulVersion, err := strconv.Atoi(vorausgesetztesModulVersionStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Vorausgesetztes modul version parameter must be a valid integer"})
@@ -186,9 +167,15 @@ func DeleteModulVoraussetzung(c *gin.Context) {
 	}
 
 	query := "DELETE FROM modul_voraussetzung WHERE modul_kuerzel = $1 AND modul_version = $2 AND vorausgesetztes_modul_kuerzel = $3 AND vorausgesetztes_modul_version = $4"
-	_, err = database.DB.Exec(context.Background(), query, modulKuerzel, modulVersion, vorausgesetztesModulKuerzel, vorausgesetztesModulVersion)
+	result, err := database.DB.Exec(context.Background(), query, modulKuerzel, modulVersion, vorausgesetztesModulKuerzel, vorausgesetztesModulVersion)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	rowsAffected := result.RowsAffected()
+	if rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "No modul voraussetzung found with the given parameters"})
 		return
 	}
 
