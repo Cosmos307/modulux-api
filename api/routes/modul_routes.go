@@ -8,7 +8,7 @@ import (
 
 func ModulRoutes(router *gin.Engine) {
 
-	moduleGroup := router.Group("/module")
+	moduleGroup := router.Group("/modul")
 	{
 		moduleGroup.GET("/", controllers.GetModules)
 		moduleGroup.GET("/:kuerzel/:version", controllers.GetModule)
