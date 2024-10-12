@@ -186,3 +186,25 @@ CREATE TABLE IF NOT EXISTS modul_block (
     PRIMARY KEY (modul_kuerzel, modul_version, block_id)
 );
 
+CREATE TABLE IF NOT EXISTS taxonomie_kategorie (
+    id SERIAL PRIMARY KEY,
+    stufe INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    beschreibung TEXT
+);
+
+CREATE TABLE IF NOT EXISTS kognitiver_prozess (
+    id SERIAL PRIMARY KEY,
+    kategorie_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (kategorie_id) REFERENCES taxonomie_kategorie(id)
+);
+
+CREATE TABLE IF NOT EXISTS taxonomie_verb (
+    id SERIAL PRIMARY KEY,
+    kategorie_id INT,
+    verb VARCHAR(255) NOT NULL,
+    
+    FOREIGN KEY (kategorie_id) REFERENCES taxonomie_kategorie(id)
+);
