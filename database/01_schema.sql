@@ -84,6 +84,51 @@ CREATE TABLE IF NOT EXISTS block (
     vertiefung_id INT REFERENCES vertiefung(vertiefung_id) ON DELETE CASCADE
 );
 
+CREATE TABLE modul_historie (
+    id SERIAL PRIMARY KEY,
+    kuerzel VARCHAR(6) NOT NULL,
+    version INT NOT NULL,
+    frueherer_schluessel VARCHAR(6),
+    modultitel VARCHAR(100) NOT NULL,
+    modultitel_englisch VARCHAR(100),
+    kommentar TEXT,
+    niveau studienniveau NOT NULL,
+    dauer INT NOT NULL,
+    turnus semester_turnus NOT NULL,
+    studium_integrale BOOLEAN NOT NULL DEFAULT FALSE,
+    sprachenzentrum BOOLEAN NOT NULL DEFAULT FALSE,
+    opal_link VARCHAR(255),
+    gruppengroesse_vorlesung INT,
+    gruppengroesse_uebung INT,
+    gruppengroesse_praktikum INT,
+    lehrform TEXT,
+    medienform TEXT,
+    lehrinhalte TEXT,
+    qualifikationsziele TEXT,
+    sozial_und_selbstkompetenzen TEXT,
+    besondere_zulassungsvoraussetzungen TEXT,
+    empfohlene_voraussetzungen TEXT,
+    fortsetzungsmoeglichkeiten TEXT,
+    hinweise TEXT,
+    ects_credits DECIMAL,
+    praesenzeit_woche_vorlesung INT,
+    praesenzeit_woche_uebung INT,
+    praesenzeit_woche_praktikum INT,
+    praesenzeit_woche_sonstiges INT,
+    selbststudienzeit INT,
+    selbststudienzeit_aufschluesselung TEXT,
+    aktuelle_lehrressourcen TEXT,
+    literatur TEXT,
+    parent_modul_kuerzel VARCHAR(6),
+    parent_modul_version INT,
+    fakultaet_id INT,
+    studienrichtung_id INT,
+    vertiefung_id INT,
+    geaendert_am TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    vorheriger_zustand_id INT REFERENCES modul_history(id)
+
+);
+
 CREATE TABLE IF NOT EXISTS modul (
     kuerzel VARCHAR(6) NOT NULL,
     version INT NOT NULL,
@@ -123,12 +168,15 @@ CREATE TABLE IF NOT EXISTS modul (
     literatur TEXT,
     
     parent_modul_kuerzel VARCHAR(7),
-    parent_modul_version INT,  
+    parent_modul_version INT,
+    vorheriger_zustand_id INT,  
 
     fakultaet_id INT REFERENCES fakultaet(fakultaet_id),
     studienrichtung_id INT REFERENCES studienrichtung(studienrichtung_id) ON DELETE CASCADE,
     vertiefung_id INT REFERENCES vertiefung(vertiefung_id) ON DELETE CASCADE,
     FOREIGN KEY (parent_modul_kuerzel, parent_modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE,
+    FOREIGN KEY (vorheriger_zustand_id) REFERENCES modul_history(id),
+
 
     PRIMARY KEY (kuerzel, version)
 );
@@ -208,3 +256,4 @@ CREATE TABLE IF NOT EXISTS taxonomie_verb (
     
     FOREIGN KEY (kategorie_id) REFERENCES taxonomie_kategorie(id)
 );
+

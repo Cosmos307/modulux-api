@@ -90,7 +90,8 @@ INSERT INTO modul (
     studienrichtung_id,             -- 33: Studienrichtung ID
     vertiefung_id,                  -- 34: Vertiefung ID
     parent_modul_kuerzel,           -- 35: parent_modul_kuerzel
-    parent_modul_version            -- 36: parent_modul_version
+    parent_modul_version,            -- 36: parent_modul_version
+    vorheriger_zustand_id       -- 37: vorheriger_zustand_id
 )
 VALUES 
 (   'C114',                         -- 1: kuerzel NN
@@ -110,12 +111,23 @@ VALUES
     NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
     'Vorlesung Übung Bearbeiten von Problemen und Lösungsfindung, Selbstudium anhand theoretischer und praktischer Übungsaufgaben', -- 15: lehrform
     NULL,                           -- 16: medienform (kein Wert)
-    'Modellierung und formale Darstellung von Daten durch Mengen; Mengenoperationen
-    Zusammenhängen durch Relationen, Funktionen, Äquivalenz- Ordnungsrelationen, Graphen
-    strukturierten Daten durch Wörter, Texte, Sprachen, Bäume, Signaturen, Terme, strukturelle Induktion, algebraische Strukturen
-    Eigenschaften und Anforderungen in Logiken (jeweils Syntax, Semantik, Folgern, Schließen)
-    Software-Schnittstellen durch abstrakte Datentypen
-    Abläufen und Berechnungen durch Zustandsübergangssysteme jeweils mit praktischen Modellierungsbeispielen;',  -- 17: lehrinhalte (gekürzt)
+    'Aufgabenstellung und Begriffsbestimmung
+    Entwicklung von Betriebssystemen
+    Klassifikation und Methodik
+    Prozesse: Konzept, Beschreibung, Kontrolle von Prozessen
+    Speicherverwaltung
+    Interprozesskommunikation: Signale, Pipes, Sockets, System V IPC (Message Queues, Semaphore, Shared Memory)
+    Prozesskoordination: Concurrency, kritische Bereiche, Lösungsansätze
+    Scheduling: Typen, Bursts, Prozess-Scheduling, Schedulingalgorithmen
+    Virtualierungskonzepte
+    Dateisysteme
+    Sicherheitmechanismen
+    PC-Betriebssysteme als Beispiel
+    Prozesse, Dateisysteme, Nutzer
+    Kommandoprozeduren unter Linux
+    parallele Prozesse unter Linux
+    einfache Formen der Kommunikation paralleler Prozesse
+    praktische Übungen zur Programmierung von Kommandoprozeduren und parallelen Prozessen',  -- 17: lehrinhalte (gekürzt)
     'Die Studierenden können mathematische und logische Grundkonzepte zur Modellierung praktischer Aufgabenstellungen anwenden.
     Sie können Anforderungen an Software und Systeme formal beschreiben und wissen, dass deren Korrektheit mit formalen Methoden nachweisbar ist.', -- 18: qualifikationsziele (gekürzt)
     NULL,                           -- 19: sozial_und_selbstkompetenzen (kein Wert)
@@ -142,7 +154,8 @@ VALUES
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
     NULL,                           -- 35: parent_modul_kuerzel,
-    NULL                            -- parent_modul_version
+    NULL,                            -- parent_modul_version
+    NULL                            -- vorheriger_zustand_id
 ),
 (   'C287',                         -- 1: kuerzel NN
     3,                              -- 2: version  NN
@@ -180,7 +193,8 @@ VALUES
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
     NULL,                           -- 35: parent_modul_kuerzel,
-    NULL                            -- parent_modul_version
+    NULL,                           -- parent_modul_version
+    NULL                            -- vorheriger_zustand_id
 ),
 (   'C287.1',                       -- 1: kuerzel NN
     3,                              -- 2: version  NN
@@ -197,11 +211,8 @@ VALUES
     120,                            -- 12: gruppengroesse_vorlesung
     30,                             -- 13: gruppengroesse_uebung
     NULL,                           -- 14: gruppengroesse_praktikum (kein Wert)
-    'Seminaristische Vorlesung
-    Übungen zu Theorie und praktischen Fertigkeiten im Computerpool
-    Übungsaufgaben für das Selbststudium',                           -- 15: lehrform
-    'Vorlesungen kombinieren vorbereitete Präsentationen und Erarbeitung von Themen an der Tafel
-    Übungsaufgaben maßgeblich aus Standardwerken des Lehrgebiets',                           -- 16: medienform (kein Wert)
+    'Seminaristische Vorlesung Übungen zu Theorie und praktischen Fertigkeiten im Computerpool Übungsaufgaben für das Selbststudium',    -- 15: lehrform
+    'Vorlesungen kombinieren vorbereitete Präsentationen und Erarbeitung von Themen an der Tafel Übungsaufgaben maßgeblich aus Standardwerken des Lehrgebiets',                           -- 16: medienform (kein Wert)
     'Aufgabenstellung und Begriffsbestimmung
     Entwicklung von Betriebssystemen
     Klassifikation und Methodik
@@ -240,7 +251,8 @@ VALUES
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
     'C287',                         -- 35: parent_modul_kuerzel,
-    3                               -- parent_modul_version
+    3,                               -- parent_modul_version
+    NULL                            -- vorheriger_zustand_id
 ),
 (   'C287.2',                       -- 1: kuerzel NN
     3,                              -- 2: version  NN
@@ -302,7 +314,8 @@ VALUES
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
     'C287',                         -- 35: parent_modul_kuerzel,
-    3                               -- parent_modul_version
+    3,                               -- parent_modul_version
+    NULL                            -- vorheriger_zustand_id
 ), -- ------------------------------
 (   'C073',                         -- 1: kuerzel NN
     0,                              -- 2: version  NN
@@ -350,7 +363,8 @@ VALUES
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
     NULL,                           -- 35: parent_modul_kuerzel,
-    NULL                            -- parent_modul_version
+    NULL,                            -- parent_modul_version
+    NULL                            -- vorheriger_zustand_id
 ),
 (   'C171',                         -- 1: kuerzel NN
     0,                              -- 2: version  NN
@@ -401,7 +415,8 @@ VALUES
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
     NULL,                           -- 35: parent_modul_kuerzel,
-    NULL                            -- parent_modul_version
+    NULL,                            -- parent_modul_version
+    NULL                            -- vorheriger_zustand_id
 );
 
 INSERT INTO modul_voraussetzung (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version)
