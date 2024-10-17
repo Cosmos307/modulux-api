@@ -31,10 +31,10 @@ type Module struct {
 	Hinweise                           null.String `json:"hinweise"`
 	EctsCredits                        float64     `json:"ects_credits" binding:"required"`
 	Workload                           int         `json:"workload"`
-	PraesenzeitWocheVorlesung          int         `json:"praesenzeit_woche_vorlesung"`
-	PraesenzeitWocheUebung             int         `json:"praesenzeit_woche_uebung"`
-	PraesenzeitWochePraktikum          int         `json:"praesenzeit_woche_praktikum"`
-	PraesenzeitWocheSonstiges          int         `json:"praesenzeit_woche_sonstiges"`
+	PraesenzeitWocheVorlesung          float64     `json:"praesenzeit_woche_vorlesung"`
+	PraesenzeitWocheUebung             float64     `json:"praesenzeit_woche_uebung"`
+	PraesenzeitWochePraktikum          float64     `json:"praesenzeit_woche_praktikum"`
+	PraesenzeitWocheSonstiges          float64     `json:"praesenzeit_woche_sonstiges"`
 	Selbststudienzeit                  int         `json:"selbststudienzeit"`
 	SelbststudienzeitAufschluesselung  null.String `json:"selbststudienzeit_aufschluesselung"`
 	AktuelleLehrressourcen             null.String `json:"aktuelle_lehrressourcen"`
@@ -44,4 +44,5 @@ type Module struct {
 	FakultaetID                        null.Int    `json:"fakultaet_id"`
 	StudienrichtungID                  null.Int    `json:"studienrichtung_id"`
 	VertiefungID                       null.Int    `json:"vertiefung_id"`
+	VorherigerZustandID                null.Int    `json:"vorheriger_zustand_id"`
 }
