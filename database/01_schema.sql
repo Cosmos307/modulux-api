@@ -125,7 +125,7 @@ CREATE TABLE modul_historie (
     studienrichtung_id INT,
     vertiefung_id INT,
     geaendert_am TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    vorheriger_zustand_id INT REFERENCES modul_history(id)
+    vorheriger_zustand_id INT REFERENCES modul_historie(id)
 
 );
 
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS modul (
     studienrichtung_id INT REFERENCES studienrichtung(studienrichtung_id) ON DELETE CASCADE,
     vertiefung_id INT REFERENCES vertiefung(vertiefung_id) ON DELETE CASCADE,
     FOREIGN KEY (parent_modul_kuerzel, parent_modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE,
-    FOREIGN KEY (vorheriger_zustand_id) REFERENCES modul_history(id),
+    FOREIGN KEY (vorheriger_zustand_id) REFERENCES modul_historie(id),
 
 
     PRIMARY KEY (kuerzel, version)

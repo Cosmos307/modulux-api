@@ -8,7 +8,7 @@ import (
 
 func PersonRoutes(router *gin.Engine) {
 
-	personGroup := router.Group("/persons")
+	personGroup := router.Group("/personen")
 	{
 		personGroup.GET("/", controllers.GetPersons)
 		personGroup.GET("/:id", controllers.GetPerson)
