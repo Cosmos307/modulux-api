@@ -12,6 +12,7 @@ func StudiengangRoutes(router *gin.Engine) {
 	{
 		studiengangGroup.GET("/", controllers.GetStudiengaenge)
 		studiengangGroup.GET("/:id", controllers.GetStudiengang)
+		studiengangGroup.GET("/:studiengang_id/modulverantwortliche", controllers.GetModulverantwortlicheByStudiengang)
 		studiengangGroup.PUT("/:id/", controllers.UpdateStudiengang)
 		studiengangGroup.POST("/", controllers.CreateStudiengang)
 		studiengangGroup.DELETE("/:id", controllers.DeleteStudiengang)
