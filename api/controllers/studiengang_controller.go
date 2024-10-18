@@ -153,3 +153,49 @@ func DeleteStudiengang(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Studiengang deleted successfully"})
 }
+
+// GetModulverantwortlicheByStudiengang retrieves all modulverantwortliche for a specific studiengang_id
+func GetModulverantwortlicheByStudiengang(c *gin.Context) {
+	studiengangID := c.Param("id")
+	var modulverantwortliche []models.Person
+
+	query := `
+        SELECT p.person_id, p.titel, p.vorname, p.nachname, p.email, p.telefonnummer, p.raum, p.funktion
+        FROM person p
+        JOIN modul_person_rolle mpr ON p.person_id = mpr.person_id
+        JOIN modul_studiengang ms ON mpr.modul_kuerzel = ms.modul_kuerzel AND mpr.modul_version = ms.modul_version
+        JOIN rolle r ON mpr.rolle_id = r.rolle_id
+        WHERE ms.studiengang_id = $1 AND r.bezeichnung = 'Modulverantwortlicher'
+    `
+	rows, err := database.DB.Query(context.Background(), query, studiengangID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var person models.Person
+		if err := rows.Scan(
+			&person.PersonID,
+			&person.Titel,
+			&person.Vorname,
+			&person.Nachname,
+			&person.Email,
+			&person.Telefonnummer,
+			&person.Raum,
+			&person.Funktion,
+		); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		modulverantwortliche = append(modulverantwortliche, person)
+	}
+
+	if err := rows.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, modulverantwortliche)
+}
