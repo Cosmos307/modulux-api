@@ -530,7 +530,7 @@ func ResetModuleToPreviousState(c *gin.Context) {
             gruppengroesse_vorlesung, gruppengroesse_uebung, gruppengroesse_praktikum, lehrform, medienform, lehrinhalte, qualifikationsziele, sozial_und_selbstkompetenzen,
             besondere_zulassungsvoraussetzungen, empfohlene_voraussetzungen, fortsetzungsmoeglichkeiten, hinweise, ects_credits, praesenzeit_woche_vorlesung,
             praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, literatur,
-            parent_modul_kuerzel, parent_modul_version, fakultaet_id, studienrichtung_id, vertiefung_id
+            parent_modul_kuerzel, parent_modul_version, fakultaet_id, studienrichtung_id, vertiefung_id, vorheriger_zustand_id
         FROM modul_historie
         WHERE id = $1
     `, previousStateID).Scan(
@@ -571,6 +571,7 @@ func ResetModuleToPreviousState(c *gin.Context) {
         &previousModule.FakultaetID,
         &previousModule.StudienrichtungID,
         &previousModule.VertiefungID,
+		&previousModule.VorherigerZustandID,
     )
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -616,6 +617,7 @@ func ResetModuleToPreviousState(c *gin.Context) {
             fakultaet_id = $33,
             studienrichtung_id = $34,
             vertiefung_id = $35
+			
         WHERE kuerzel = $36 AND version = $37
     `,
         previousModule.FruehererSchluessel,
@@ -653,6 +655,7 @@ func ResetModuleToPreviousState(c *gin.Context) {
         previousModule.FakultaetID,
         previousModule.StudienrichtungID,
         previousModule.VertiefungID,
+		previousModule.VorherigerZustandID,
         kuerzel,
         version,
     )
