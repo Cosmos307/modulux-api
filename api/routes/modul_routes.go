@@ -15,6 +15,7 @@ func ModulRoutes(router *gin.Engine) {
 		moduleGroup.GET("opal-links", controllers.GetOpalLinks)
 		moduleGroup.GET("/:kuerzel/:version/opal-link", controllers.GetOpalLink)
 		moduleGroup.POST("/", controllers.CreateModule)
+		moduleGroup.POST("/:kuerzel/:version/reset", controllers.ResetModuleToPreviousState)
 		moduleGroup.PUT("/:kuerzel/:version", controllers.UpdateOrCreateModuleVersion)
 		moduleGroup.DELETE("/:kuerzel/:version", controllers.DeleteModule)
 

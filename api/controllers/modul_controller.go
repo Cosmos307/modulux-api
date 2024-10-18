@@ -493,3 +493,179 @@ func updateModule(tx pgx.Tx, kuerzel string, version int, updatedModule models.M
 
 	return nil
 }
+
+// ResetModuleToPreviousState setzt die letzte Änderung eines Moduls zurück
+func ResetModuleToPreviousState(c *gin.Context) {
+    kuerzel := c.Param("kuerzel")
+    version, err := strconv.Atoi(c.Param("version"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
+        return
+    }
+
+    ctx := context.Background()
+    tx, err := database.DB.Begin(ctx)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    defer tx.Rollback(ctx)
+
+    // Hole die vorherige Zustand ID des aktuellen Moduls
+    var previousStateID int
+    err = tx.QueryRow(ctx, `
+        SELECT vorheriger_zustand_id
+        FROM modul
+        WHERE kuerzel = $1 AND version = $2
+    `, kuerzel, version).Scan(&previousStateID)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    // Hole die Informationen aus der modul_historie Tabelle
+    var previousModule models.Module
+    err = tx.QueryRow(ctx, `
+        SELECT kuerzel, version, frueherer_schluessel, modultitel, modultitel_englisch, kommentar, niveau, dauer, turnus, studium_integrale, sprachenzentrum, opal_link,
+            gruppengroesse_vorlesung, gruppengroesse_uebung, gruppengroesse_praktikum, lehrform, medienform, lehrinhalte, qualifikationsziele, sozial_und_selbstkompetenzen,
+            besondere_zulassungsvoraussetzungen, empfohlene_voraussetzungen, fortsetzungsmoeglichkeiten, hinweise, ects_credits, praesenzeit_woche_vorlesung,
+            praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, literatur,
+            parent_modul_kuerzel, parent_modul_version, fakultaet_id, studienrichtung_id, vertiefung_id
+        FROM modul_historie
+        WHERE id = $1
+    `, previousStateID).Scan(
+        &previousModule.Kuerzel,
+        &previousModule.Version,
+        &previousModule.FruehererSchluessel,
+        &previousModule.Modultitel,
+        &previousModule.ModultitelEnglisch,
+        &previousModule.Kommentar,
+        &previousModule.Niveau,
+        &previousModule.Dauer,
+        &previousModule.Turnus,
+        &previousModule.StudiumIntegrale,
+        &previousModule.Sprachenzentrum,
+        &previousModule.OpalLink,
+        &previousModule.GruppengroesseVorlesung,
+        &previousModule.GruppengroesseUebung,
+        &previousModule.GruppengroessePraktikum,
+        &previousModule.Lehrform,
+        &previousModule.Medienform,
+        &previousModule.Lehrinhalte,
+        &previousModule.Qualifikationsziele,
+        &previousModule.SozialUndSelbstkompetenzen,
+        &previousModule.BesondereZulassungsvoraussetzungen,
+        &previousModule.EmpfohleneVoraussetzungen,
+        &previousModule.Fortsetzungsmoeglichkeiten,
+        &previousModule.Hinweise,
+        &previousModule.EctsCredits,
+        &previousModule.PraesenzeitWocheVorlesung,
+        &previousModule.PraesenzeitWocheUebung,
+        &previousModule.PraesenzeitWochePraktikum,
+        &previousModule.PraesenzeitWocheSonstiges,
+        &previousModule.SelbststudienzeitAufschluesselung,
+        &previousModule.AktuelleLehrressourcen,
+        &previousModule.Literatur,
+        &previousModule.ParentModulKuerzel,
+        &previousModule.ParentModulVersion,
+        &previousModule.FakultaetID,
+        &previousModule.StudienrichtungID,
+        &previousModule.VertiefungID,
+    )
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    // Aktualisiere das aktuelle Modul mit den Informationen aus der modul_historie Tabelle
+    _, err = tx.Exec(ctx, `
+        UPDATE modul
+        SET 
+            frueherer_schluessel = $1,
+            modultitel = $2,
+            modultitel_englisch = $3,
+            kommentar = $4,
+            niveau = $5,
+            dauer = $6,
+            turnus = $7,
+            studium_integrale = $8,
+            sprachenzentrum = $9,
+            opal_link = $10,
+            gruppengroesse_vorlesung = $11,
+            gruppengroesse_uebung = $12,
+            gruppengroesse_praktikum = $13,
+            lehrform = $14,
+            medienform = $15,
+            lehrinhalte = $16,
+            qualifikationsziele = $17,
+            sozial_und_selbstkompetenzen = $18,
+            besondere_zulassungsvoraussetzungen = $19,
+            empfohlene_voraussetzungen = $20,
+            fortsetzungsmoeglichkeiten = $21,
+            hinweise = $22,
+            ects_credits = $23,
+            praesenzeit_woche_vorlesung = $24,
+            praesenzeit_woche_uebung = $25,
+            praesenzeit_woche_praktikum = $26,
+            praesenzeit_woche_sonstiges = $27,
+            selbststudienzeit_aufschluesselung = $28,
+            aktuelle_lehrressourcen = $29,
+            literatur = $30,
+            parent_modul_kuerzel = $31,
+            parent_modul_version = $32,
+            fakultaet_id = $33,
+            studienrichtung_id = $34,
+            vertiefung_id = $35
+        WHERE kuerzel = $36 AND version = $37
+    `,
+        previousModule.FruehererSchluessel,
+        previousModule.Modultitel,
+        previousModule.ModultitelEnglisch,
+        previousModule.Kommentar,
+        previousModule.Niveau,
+        previousModule.Dauer,
+        previousModule.Turnus,
+        previousModule.StudiumIntegrale,
+        previousModule.Sprachenzentrum,
+        previousModule.OpalLink,
+        previousModule.GruppengroesseVorlesung,
+        previousModule.GruppengroesseUebung,
+        previousModule.GruppengroessePraktikum,
+        previousModule.Lehrform,
+        previousModule.Medienform,
+        previousModule.Lehrinhalte,
+        previousModule.Qualifikationsziele,
+        previousModule.SozialUndSelbstkompetenzen,
+        previousModule.BesondereZulassungsvoraussetzungen,
+        previousModule.EmpfohleneVoraussetzungen,
+        previousModule.Fortsetzungsmoeglichkeiten,
+        previousModule.Hinweise,
+        previousModule.EctsCredits,
+        previousModule.PraesenzeitWocheVorlesung,
+        previousModule.PraesenzeitWocheUebung,
+        previousModule.PraesenzeitWochePraktikum,
+        previousModule.PraesenzeitWocheSonstiges,
+        previousModule.SelbststudienzeitAufschluesselung,
+        previousModule.AktuelleLehrressourcen,
+        previousModule.Literatur,
+        previousModule.ParentModulKuerzel,
+        previousModule.ParentModulVersion,
+        previousModule.FakultaetID,
+        previousModule.StudienrichtungID,
+        previousModule.VertiefungID,
+        kuerzel,
+        version,
+    )
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    err = tx.Commit(ctx)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "Module successfully reset to previous state"})
+}
