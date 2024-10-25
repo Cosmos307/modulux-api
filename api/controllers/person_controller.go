@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // GetPersons retrieves all persons from the database
@@ -87,8 +88,18 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 
-	query := "UPDATE person SET titel = $1, vorname = $2, nachname = $3, email = $4, telefonnummer = $5, raum = $6, funktion = $7 WHERE person_id = $8"
-	_, execErr := database.DB.Exec(ctx, query, updatedPerson.Titel, updatedPerson.Vorname, updatedPerson.Nachname, updatedPerson.Email, updatedPerson.Telefonnummer, updatedPerson.Raum, updatedPerson.Funktion, personID)
+	// Hash the password if it is provided
+	if updatedPerson.Password != "" {
+		hashedPassword, hashErr := bcrypt.GenerateFromPassword([]byte(updatedPerson.Password), bcrypt.DefaultCost)
+		if hashErr != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": hashErr.Error()})
+			return
+		}
+		updatedPerson.Password = string(hashedPassword)
+	}
+
+	query := "UPDATE person SET titel = $1, vorname = $2, nachname = $3, email = $4, telefonnummer = $5, raum = $6, funktion = $7, password = $8 WHERE person_id = $9"
+	_, execErr := database.DB.Exec(ctx, query, updatedPerson.Titel, updatedPerson.Vorname, updatedPerson.Nachname, updatedPerson.Email, updatedPerson.Telefonnummer, updatedPerson.Raum, updatedPerson.Funktion, updatedPerson.Password, personID)
 	if execErr != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": execErr.Error()})
 		return
@@ -108,9 +119,17 @@ func CreatePerson(c *gin.Context) {
 		return
 	}
 
+	// Hash the password
+	hashedPassword, hashErr := bcrypt.GenerateFromPassword([]byte(newPerson.Password), bcrypt.DefaultCost)
+	if hashErr != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": hashErr.Error()})
+		return
+	}
+	newPerson.Password = string(hashedPassword)
+
 	ctx := context.Background()
-	query := "INSERT INTO person (titel, vorname, nachname, email, telefonnummer, raum, funktion) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id"
-	dbErr := database.DB.QueryRow(ctx, query, newPerson.Titel, newPerson.Vorname, newPerson.Nachname, newPerson.Email, newPerson.Telefonnummer, newPerson.Raum, newPerson.Funktion).Scan(&newPerson.PersonID)
+	query := "INSERT INTO person (titel, vorname, nachname, email, telefonnummer, raum, funktion, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING person_id"
+	dbErr := database.DB.QueryRow(ctx, query, newPerson.Titel, newPerson.Vorname, newPerson.Nachname, newPerson.Email, newPerson.Telefonnummer, newPerson.Raum, newPerson.Funktion, newPerson.Password).Scan(&newPerson.PersonID)
 	if dbErr != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": dbErr.Error()})
 		return
