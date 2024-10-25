@@ -7,7 +7,7 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// Routes
+	LoginRoutes(r)
 	PersonRoutes(r)
 	ModulRoutes(r)
 	StudiengangRoutes(r)
