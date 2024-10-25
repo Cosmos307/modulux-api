@@ -214,7 +214,7 @@ func UpdateOrCreateModuleVersion(c *gin.Context) {
 	}
 	defer tx.Rollback(context.Background())
 
-	previousHistoryID, err := SaveModuleHistory(tx, kuerzel, version)
+	previousHistoryID, err := saveModuleHistory(tx, kuerzel, version)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -331,8 +331,8 @@ func InsertModule(tx pgx.Tx, kuerzel string, version int, module models.Module, 
 	return nil
 }
 
-// SaveModuleHistory saves the current state of a module to the modul_historie table
-func SaveModuleHistory(tx pgx.Tx, kuerzel string, version int) (int, error) {
+// saveModuleHistory saves the current state of a module to the modul_historie table
+func saveModuleHistory(tx pgx.Tx, kuerzel string, version int) (int, error) {
 
 	var historyID int
 	query := `
@@ -360,6 +360,7 @@ func SaveModuleHistory(tx pgx.Tx, kuerzel string, version int) (int, error) {
 	return historyID, nil
 }
 
+// getCurrentModule retrieves the current module from the database
 func getCurrentModule(tx pgx.Tx, kuerzel string, version int) (models.Module, error) {
 	var module models.Module
 	query := `
@@ -387,6 +388,7 @@ func getCurrentModule(tx pgx.Tx, kuerzel string, version int) (models.Module, er
 	return module, nil
 }
 
+// hasSignificantChanges checks if there are significant changes between the current and updated module
 func hasSignificantChanges(currentModule, updatedModule models.Module) bool {
 	return updatedModule.Qualifikationsziele != currentModule.Qualifikationsziele ||
 		updatedModule.Dauer != currentModule.Dauer ||
@@ -402,6 +404,7 @@ func hasSignificantChanges(currentModule, updatedModule models.Module) bool {
 		updatedModule.Fortsetzungsmoeglichkeiten != currentModule.Fortsetzungsmoeglichkeiten
 }
 
+// hasMinorChanges checks if there are minor changes between the current and updated module
 func hasMinorChanges(currentModule, updatedModule models.Module) bool {
 	return updatedModule.FruehererSchluessel != currentModule.FruehererSchluessel ||
 		updatedModule.Modultitel != currentModule.Modultitel ||
@@ -428,6 +431,7 @@ func hasMinorChanges(currentModule, updatedModule models.Module) bool {
 		updatedModule.VertiefungID != currentModule.VertiefungID
 }
 
+// updateModule updates a module in the database
 func updateModule(tx pgx.Tx, kuerzel string, version int, updatedModule models.Module, vorherigerZustandID int) error {
 	query := `
         UPDATE modul
@@ -494,38 +498,38 @@ func updateModule(tx pgx.Tx, kuerzel string, version int, updatedModule models.M
 	return nil
 }
 
-// ResetModuleToPreviousState setzt die letzte Änderung eines Moduls zurück
+// ResetModuleToPreviousState resets the last change of a module
 func ResetModuleToPreviousState(c *gin.Context) {
-    kuerzel := c.Param("kuerzel")
-    version, err := strconv.Atoi(c.Param("version"))
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
-        return
-    }
+	kuerzel := c.Param("kuerzel")
+	version, err := strconv.Atoi(c.Param("version"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Version parameter must be a valid integer"})
+		return
+	}
 
-    ctx := context.Background()
-    tx, err := database.DB.Begin(ctx)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-    defer tx.Rollback(ctx)
+	ctx := context.Background()
+	tx, err := database.DB.Begin(ctx)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer tx.Rollback(ctx)
 
-    // Hole die vorherige Zustand ID des aktuellen Moduls
-    var previousStateID int
-    err = tx.QueryRow(ctx, `
+	// Get the ID of the previous state
+	var previousStateID int
+	err = tx.QueryRow(ctx, `
         SELECT vorheriger_zustand_id
         FROM modul
         WHERE kuerzel = $1 AND version = $2
     `, kuerzel, version).Scan(&previousStateID)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    // Hole die Informationen aus der modul_historie Tabelle
-    var previousModule models.Module
-    err = tx.QueryRow(ctx, `
+	// Get the previous module from the history
+	var previousModule models.Module
+	err = tx.QueryRow(ctx, `
         SELECT kuerzel, version, frueherer_schluessel, modultitel, modultitel_englisch, kommentar, niveau, dauer, turnus, studium_integrale, sprachenzentrum, opal_link,
             gruppengroesse_vorlesung, gruppengroesse_uebung, gruppengroesse_praktikum, lehrform, medienform, lehrinhalte, qualifikationsziele, sozial_und_selbstkompetenzen,
             besondere_zulassungsvoraussetzungen, empfohlene_voraussetzungen, fortsetzungsmoeglichkeiten, hinweise, ects_credits, praesenzeit_woche_vorlesung,
@@ -534,52 +538,52 @@ func ResetModuleToPreviousState(c *gin.Context) {
         FROM modul_historie
         WHERE id = $1
     `, previousStateID).Scan(
-        &previousModule.Kuerzel,
-        &previousModule.Version,
-        &previousModule.FruehererSchluessel,
-        &previousModule.Modultitel,
-        &previousModule.ModultitelEnglisch,
-        &previousModule.Kommentar,
-        &previousModule.Niveau,
-        &previousModule.Dauer,
-        &previousModule.Turnus,
-        &previousModule.StudiumIntegrale,
-        &previousModule.Sprachenzentrum,
-        &previousModule.OpalLink,
-        &previousModule.GruppengroesseVorlesung,
-        &previousModule.GruppengroesseUebung,
-        &previousModule.GruppengroessePraktikum,
-        &previousModule.Lehrform,
-        &previousModule.Medienform,
-        &previousModule.Lehrinhalte,
-        &previousModule.Qualifikationsziele,
-        &previousModule.SozialUndSelbstkompetenzen,
-        &previousModule.BesondereZulassungsvoraussetzungen,
-        &previousModule.EmpfohleneVoraussetzungen,
-        &previousModule.Fortsetzungsmoeglichkeiten,
-        &previousModule.Hinweise,
-        &previousModule.EctsCredits,
-        &previousModule.PraesenzeitWocheVorlesung,
-        &previousModule.PraesenzeitWocheUebung,
-        &previousModule.PraesenzeitWochePraktikum,
-        &previousModule.PraesenzeitWocheSonstiges,
-        &previousModule.SelbststudienzeitAufschluesselung,
-        &previousModule.AktuelleLehrressourcen,
-        &previousModule.Literatur,
-        &previousModule.ParentModulKuerzel,
-        &previousModule.ParentModulVersion,
-        &previousModule.FakultaetID,
-        &previousModule.StudienrichtungID,
-        &previousModule.VertiefungID,
+		&previousModule.Kuerzel,
+		&previousModule.Version,
+		&previousModule.FruehererSchluessel,
+		&previousModule.Modultitel,
+		&previousModule.ModultitelEnglisch,
+		&previousModule.Kommentar,
+		&previousModule.Niveau,
+		&previousModule.Dauer,
+		&previousModule.Turnus,
+		&previousModule.StudiumIntegrale,
+		&previousModule.Sprachenzentrum,
+		&previousModule.OpalLink,
+		&previousModule.GruppengroesseVorlesung,
+		&previousModule.GruppengroesseUebung,
+		&previousModule.GruppengroessePraktikum,
+		&previousModule.Lehrform,
+		&previousModule.Medienform,
+		&previousModule.Lehrinhalte,
+		&previousModule.Qualifikationsziele,
+		&previousModule.SozialUndSelbstkompetenzen,
+		&previousModule.BesondereZulassungsvoraussetzungen,
+		&previousModule.EmpfohleneVoraussetzungen,
+		&previousModule.Fortsetzungsmoeglichkeiten,
+		&previousModule.Hinweise,
+		&previousModule.EctsCredits,
+		&previousModule.PraesenzeitWocheVorlesung,
+		&previousModule.PraesenzeitWocheUebung,
+		&previousModule.PraesenzeitWochePraktikum,
+		&previousModule.PraesenzeitWocheSonstiges,
+		&previousModule.SelbststudienzeitAufschluesselung,
+		&previousModule.AktuelleLehrressourcen,
+		&previousModule.Literatur,
+		&previousModule.ParentModulKuerzel,
+		&previousModule.ParentModulVersion,
+		&previousModule.FakultaetID,
+		&previousModule.StudienrichtungID,
+		&previousModule.VertiefungID,
 		&previousModule.VorherigerZustandID,
-    )
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    // Aktualisiere das aktuelle Modul mit den Informationen aus der modul_historie Tabelle
-    _, err = tx.Exec(ctx, `
+	// Update the module to the previous state
+	_, err = tx.Exec(ctx, `
         UPDATE modul
         SET 
             frueherer_schluessel = $1,
@@ -620,55 +624,95 @@ func ResetModuleToPreviousState(c *gin.Context) {
 			
         WHERE kuerzel = $36 AND version = $37
     `,
-        previousModule.FruehererSchluessel,
-        previousModule.Modultitel,
-        previousModule.ModultitelEnglisch,
-        previousModule.Kommentar,
-        previousModule.Niveau,
-        previousModule.Dauer,
-        previousModule.Turnus,
-        previousModule.StudiumIntegrale,
-        previousModule.Sprachenzentrum,
-        previousModule.OpalLink,
-        previousModule.GruppengroesseVorlesung,
-        previousModule.GruppengroesseUebung,
-        previousModule.GruppengroessePraktikum,
-        previousModule.Lehrform,
-        previousModule.Medienform,
-        previousModule.Lehrinhalte,
-        previousModule.Qualifikationsziele,
-        previousModule.SozialUndSelbstkompetenzen,
-        previousModule.BesondereZulassungsvoraussetzungen,
-        previousModule.EmpfohleneVoraussetzungen,
-        previousModule.Fortsetzungsmoeglichkeiten,
-        previousModule.Hinweise,
-        previousModule.EctsCredits,
-        previousModule.PraesenzeitWocheVorlesung,
-        previousModule.PraesenzeitWocheUebung,
-        previousModule.PraesenzeitWochePraktikum,
-        previousModule.PraesenzeitWocheSonstiges,
-        previousModule.SelbststudienzeitAufschluesselung,
-        previousModule.AktuelleLehrressourcen,
-        previousModule.Literatur,
-        previousModule.ParentModulKuerzel,
-        previousModule.ParentModulVersion,
-        previousModule.FakultaetID,
-        previousModule.StudienrichtungID,
-        previousModule.VertiefungID,
+		previousModule.FruehererSchluessel,
+		previousModule.Modultitel,
+		previousModule.ModultitelEnglisch,
+		previousModule.Kommentar,
+		previousModule.Niveau,
+		previousModule.Dauer,
+		previousModule.Turnus,
+		previousModule.StudiumIntegrale,
+		previousModule.Sprachenzentrum,
+		previousModule.OpalLink,
+		previousModule.GruppengroesseVorlesung,
+		previousModule.GruppengroesseUebung,
+		previousModule.GruppengroessePraktikum,
+		previousModule.Lehrform,
+		previousModule.Medienform,
+		previousModule.Lehrinhalte,
+		previousModule.Qualifikationsziele,
+		previousModule.SozialUndSelbstkompetenzen,
+		previousModule.BesondereZulassungsvoraussetzungen,
+		previousModule.EmpfohleneVoraussetzungen,
+		previousModule.Fortsetzungsmoeglichkeiten,
+		previousModule.Hinweise,
+		previousModule.EctsCredits,
+		previousModule.PraesenzeitWocheVorlesung,
+		previousModule.PraesenzeitWocheUebung,
+		previousModule.PraesenzeitWochePraktikum,
+		previousModule.PraesenzeitWocheSonstiges,
+		previousModule.SelbststudienzeitAufschluesselung,
+		previousModule.AktuelleLehrressourcen,
+		previousModule.Literatur,
+		previousModule.ParentModulKuerzel,
+		previousModule.ParentModulVersion,
+		previousModule.FakultaetID,
+		previousModule.StudienrichtungID,
+		previousModule.VertiefungID,
 		previousModule.VorherigerZustandID,
-        kuerzel,
-        version,
-    )
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+		kuerzel,
+		version,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    err = tx.Commit(ctx)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	err = tx.Commit(ctx)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"message": "Module successfully reset to previous state"})
+	c.JSON(http.StatusOK, gin.H{"message": "Module successfully reset to previous state"})
+}
+
+// GetUserRoles retrieves the roles of the logged-in user
+func GetUserRoles(c *gin.Context) {
+	personID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		return
+	}
+
+	query := `
+        SELECT r.bezeichnung
+        FROM modul_person_rolle mpr
+        JOIN rolle r ON mpr.rolle_id = r.rolle_id
+        WHERE mpr.person_id = $1
+    `
+
+	rows, err := database.DB.Query(context.Background(), query, personID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query roles"})
+		return
+	}
+	defer rows.Close()
+
+	var roles []string
+	for rows.Next() {
+		var role string
+		if err := rows.Scan(&role); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan role"})
+			return
+		}
+		roles = append(roles, role)
+	}
+
+	if err := rows.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to iterate over roles"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"roles": roles})
 }
