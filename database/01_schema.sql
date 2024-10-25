@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS person (
     email VARCHAR(255) UNIQUE NOT NULL,
     telefonnummer VARCHAR(255),
     raum VARCHAR(255),
-    funktion VARCHAR(255) NOT NULL
+    funktion VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS fakultaet (

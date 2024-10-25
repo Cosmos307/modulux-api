@@ -10,20 +10,20 @@ VALUES
     ('Wirtschaftswissenschaft und Wirtschaftsingenieurwesen', 'WW');
 
 -- Personen
-INSERT INTO person (vorname, nachname, titel, email, telefonnummer, raum, funktion)
+INSERT INTO person (vorname, nachname, titel, email, telefonnummer, raum, funktion, password)
 VALUES 
-    ('Jean-Alexander', 'Müller', 'Prof. Dr.-Ing.', 'jean-alexander.mueller@htwk-leipzig.de', '+49 341 3076-6638', 'ZU 123', 'Studiendekan'),
-    ('Sibylle', 'Schwarz', 'Prof. Dr. rer. nat.', 'sibylle.schwarz@htwk-leipzig.de', '+49 341 3076-6483', 'ZU 411', 'Professorin'),
-    ('Jens', 'Wagner', 'Prof. Dr. rer. nat.', 'jens.wagner@htwk-leipzig.de', '+49 341 3076-6494', 'LI 015', 'Professor'),
-    ('Hanna', 'Brodowsky', NULL, 'hanna.brodowsky@htwk-leipzig.de', NULL, NULL, 'Dozentin'),
-    ('Mario', 'Hlawitschka', 'Prof. Dr. rer. nat.', 'mario.hlawitschka@htwk-leipzig.de', '+49 341 3076-6493', 'ZU 224', 'Professor'),
-    ('Martin', 'Grüttmüller', 'Prof. Dr. rer. nat. habil.', 'martin.gruettmueller@htwk-leipzig.de', '+49 341 3076-6487', 'ZU 412', 'Professor'),
-    ('Karsten', 'Weicker', 'Prof. Dr. rer. nat.', 'karsten-weicker@htwk-leipzig.de', '+49 341 3076-6395', 'ZU 410', 'Professor'),
-    ('Thomas', 'Kudraß', 'Prof. Dr.-Ing.', 'thomas.kudrass@htwk-leipzig.de', '+49 341 3076-6420', 'ZU 130', 'Professor'),
-    ('Thomas', 'Riechert', 'Prof. Dr. rer. nat.', 'thomas.riechert@htwk-leipzig.de', '+49 341 3076-6413', 'ZU 507', 'Professor'),
-    ('Antje', 'Tober-Nietner', 'Dr.', 'antje.tober@htwk-leipzig.de', NULL, NULL, 'Dozentin'),
-    ('Johannes', 'Waldmann', 'Prof. Dr. rer. nat.', 'johannes.waldmann@htwk-leipzig.de', '+49 341 3076-6479', 'ZU 129', 'Professor'),
-    ('Andreas', 'Both', 'Prof. Dr. rer. nat.', 'andreas.both@htwk-leipzig.de', '+49 341 3076-6256', 'ZU 529', 'Professor');
+    ('Jean-Alexander', 'Müller', 'Prof. Dr.-Ing.', 'jean-alexander.mueller@htwk-leipzig.de', '+49 341 3076-6638', 'ZU 123', 'Studiendekan', '$2a$14$coFdmFbPMNZKnYx/jG2/wOwKoLiGh7.obc8SV29q5iZ28bKngQDqK'),
+    ('Sibylle', 'Schwarz', 'Prof. Dr. rer. nat.', 'sibylle.schwarz@htwk-leipzig.de', '+49 341 3076-6483', 'ZU 411', 'Professorin', '$2a$14$40LasxGj14cXsbizo/haMOEBV141/VrN1c1zdWt2/R2chY9i510Wi'),
+    ('Jens', 'Wagner', 'Prof. Dr. rer. nat.', 'jens.wagner@htwk-leipzig.de', '+49 341 3076-6494', 'LI 015', 'Professor', '$2a$14$WtjFBU6FS.ulh/A1F6SS1e3/xJlRd8lumXBEZXgxHqeMO4OoE1To6'),
+    ('Hanna', 'Brodowsky', NULL, 'hanna.brodowsky@htwk-leipzig.de', NULL, NULL, 'Dozentin', '$2a$14$awxB1ZjRnqKjXya/fkM4s.iTlkF6rX0Tjx5KI0SjMeXTnTJCie5bW'),
+    ('Mario', 'Hlawitschka', 'Prof. Dr. rer. nat.', 'mario.hlawitschka@htwk-leipzig.de', '+49 341 3076-6493', 'ZU 224', 'Professor', '$2a$14$FvJ4osEf6iW42LNMidUDx.fDgzBjr/Kpu7MlR8dsXce88bFoOjlC6'),
+    ('Martin', 'Grüttmüller', 'Prof. Dr. rer. nat. habil.', 'martin.gruettmueller@htwk-leipzig.de', '+49 341 3076-6487', 'ZU 412', 'Professor', '$2a$14$ko6zDJfW439N6Q3coxlR8.30fKKiGCm5S9seE4NARxhVEnGIvnAXS'),
+    ('Karsten', 'Weicker', 'Prof. Dr. rer. nat.', 'karsten-weicker@htwk-leipzig.de', '+49 341 3076-6395', 'ZU 410', 'Professor', '$2a$14$jHkvqQUyM4pUM2gHSIh.Vuy9tAT3fynpNGzL5LLwphbPrzj6KI8gW'),
+    ('Thomas', 'Kudraß', 'Prof. Dr.-Ing.', 'thomas.kudrass@htwk-leipzig.de', '+49 341 3076-6420', 'ZU 130', 'Professor', '$2a$14$D3vb1GbGut/UdrOPm/iYg.dKkFXKQQny6yxe9yRfV4bHVicvGjJSi'),
+    ('Thomas', 'Riechert', 'Prof. Dr. rer. nat.', 'thomas.riechert@htwk-leipzig.de', '+49 341 3076-6413', 'ZU 507', 'Professor', '$2a$14$/OAmiBW5bGkdW.JkhQzYoOwHo22dR5HdWBhdxM7q/0rWqR3zaG7iK'),
+    ('Antje', 'Tober-Nietner', 'Dr.', 'antje.tober@htwk-leipzig.de', NULL, NULL, 'Dozentin', '$2a$14$chIIQ1XgIoOT1kt7i5.5qOs6V/FOedfxTAJ6fp5qkv1V8tGqGWXAW'),
+    ('Johannes', 'Waldmann', 'Prof. Dr. rer. nat.', 'johannes.waldmann@htwk-leipzig.de', '+49 341 3076-6479', 'ZU 129', 'Professor', '$2a$14$zEbhgM7ArQfOXv73gJVEkOuWq8M8iWqKYWBapNFnNhJ9dR9EAa.YW'),
+    ('Andreas', 'Both', 'Prof. Dr. rer. nat.', 'andreas.both@htwk-leipzig.de', '+49 341 3076-6256', 'ZU 529', 'Professor', '$2a$14$d4EA1.cfmpf2D0.a5NnYfeHIFTi22dvTTh/fGYWdAfxDUP74uM0rq');
 
 -- Rollen 
 INSERT INTO rolle (bezeichnung)
@@ -35,7 +35,8 @@ VALUES
     ('Dozent'),
     ('Moduluxverantwortlicher'),
     ('Prozesskontrolle'),
-    ('Hochschulleitung');
+    ('Hochschulleitung'),
+    ('Fakultätsverantwortlicher');
 
 -- Studiengang 
 INSERT INTO studiengang (studiengang_id, kuerzel, nummern_im_studienablaufplan, studiengangstitel, studiengangstitel_englisch, kommentar, abschluss, erste_immatrikulation, erforderliche_credits, kapazitaet, in_vollzeit_studierbar, in_teilzeit_studierbar, fakultaet_id, teasertext, mobilitaetsfenster, website)
@@ -595,3 +596,79 @@ VALUES
     ((SELECT id FROM taxonomie_kategorie WHERE name = 'Kreieren'), 'zusammenstellen'),
     ((SELECT id FROM taxonomie_kategorie WHERE name = 'Kreieren'), 'ableiten'),
     ((SELECT id FROM taxonomie_kategorie WHERE name = 'Kreieren'), 'entwickeln');
+
+-- Berechtigungen einfügen
+INSERT INTO berechtigung (bezeichnung)
+VALUES 
+    ('modul_erstellen'),
+    ('modul_lesen'),
+    ('modul_bearbeiten'),
+    ('modul_loeschen'),
+    ('modul_bearbeiter_zuweisen'),
+    ('modul_archivieren'),
+    ('studiengang_erstellen'),
+    ('studiengang_lesen'),
+    ('studiengang_bearbeiten'),
+    ('studiengang_loeschen'),
+    ('studiengang_bearbeiter_zuweisen'),
+    ('studiengang_archivieren'),
+    ('modul_zur_begutachtung_weiterleiten'),
+    ('modul_zur_ueberarbeitung_weiterleiten'),
+    ('studiengang_zur_begutachtung_weiterleiten'),
+    ('studiengang_zur_ueberarbeitung_weiterleiten'),
+    ('studiengang_zur_freigabe_weiterleiten'),
+    ('modul_abnehmen'),
+    ('pdf_dokumente_pflegen');
+
+INSERT INTO rolle_berechtigung (rolle_id, berechtigung_id)
+VALUES 
+    -- Modulbearbeiter
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_zur_begutachtung_weiterleiten')),
+
+    -- Modulverantwortlicher
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_zur_begutachtung_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiter_zuweisen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_zur_ueberarbeitung_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Modulverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_archivieren')),
+
+    -- Studiengangbearbeiter
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_zur_begutachtung_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiter_zuweisen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_erstellen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangbearbeiter'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_zur_begutachtung_weiterleiten')),
+
+    -- Studiengangverantwortlicher
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_zur_begutachtung_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiter_zuweisen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_erstellen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_zur_begutachtung_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_bearbeiter_zuweisen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_zur_ueberarbeitung_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_zur_freigabe_weiterleiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_abnehmen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Studiengangverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_zur_ueberarbeitung_weiterleiten')),
+
+    -- Fakultätsverantwortliche/-r für Modulux
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_erstellen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_bearbeiter_zuweisen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'modul_archivieren')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_erstellen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_bearbeiter_zuweisen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Fakultätsverantwortlicher'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_archivieren')),
+
+    -- Prozesskontrolle
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Prozesskontrolle'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_lesen')),
+
+    -- Hochschulleitung
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Hochschulleitung'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_lesen')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Hochschulleitung'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_bearbeiten')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Hochschulleitung'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'studiengang_archivieren')),
+    ((SELECT rolle_id FROM rolle WHERE bezeichnung = 'Hochschulleitung'), (SELECT berechtigung_id FROM berechtigung WHERE bezeichnung = 'pdf_dokumente_pflegen'));
