@@ -9,11 +9,12 @@ import (
 
 // Config holds the configuration values
 type Config struct {
-	DBHost     string
-	DBUser     string
-	DBPassword string
-	DBName     string
-	JWTSecret  string
+	DBHost      string
+	DBUser      string
+	DBPassword  string
+	DBName      string
+	JWTSecret   string
+	CrossRefURL string
 }
 
 // LoadConfig loads configuration from environment variables or .env file
@@ -25,11 +26,12 @@ func LoadConfig() *Config {
 	}
 
 	config := &Config{
-		DBHost:     os.Getenv("DB_HOST"),
-		DBUser:     os.Getenv("DB_USER"),
-		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBName:     os.Getenv("DB_NAME"),
-		JWTSecret:  os.Getenv("JWT_SECRET"),
+		DBHost:      os.Getenv("DB_HOST"),
+		DBUser:      os.Getenv("DB_USER"),
+		DBPassword:  os.Getenv("DB_PASSWORD"),
+		DBName:      os.Getenv("DB_NAME"),
+		JWTSecret:   os.Getenv("JWT_SECRET"),
+		CrossRefURL: os.Getenv("CROSSREF_URL"),
 	}
 
 	return config

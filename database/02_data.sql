@@ -64,7 +64,7 @@ INSERT INTO modul (
     niveau,                         -- 6: Studienniveau
     dauer,                          -- 7: Dauer in Semestern
     turnus,                         -- 8: Turnus (z.B. Sommer, Winter)
-    studium_integrale,              -- 9: Ist das Modul Studium Integrale?
+    studium_generale,              -- 9: Ist das Modul Studium generale?
     sprachenzentrum,                -- 10: Ist das Modul im Sprachenzentrum?
     opal_link,                      -- 11: Link zu OPAL
     gruppengroesse_vorlesung,       -- 12: Gruppengröße Vorlesung
@@ -86,7 +86,6 @@ INSERT INTO modul (
     praesenzeit_woche_sonstiges,    -- 28: Präsenzzeit pro Woche in Sonstigem
     selbststudienzeit_aufschluesselung, -- 29: Aufschlüsselung der Selbststudienzeit
     aktuelle_lehrressourcen,        -- 30: Aktuelle Lehrressourcen
-    literatur,                      -- 31: Literatur
     fakultaet_id,                   -- 32: Fakultät ID
     studienrichtung_id,             -- 33: Studienrichtung ID
     vertiefung_id,                  -- 34: Vertiefung ID
@@ -104,7 +103,7 @@ VALUES
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
-    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 9: studium_generale
     FALSE,                          -- 10: sprachenzentrum
     NULL,                           -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
@@ -146,11 +145,7 @@ VALUES
     28 Stunden E-Learning
     84 Stunden Bearbeitung Prüfungsvorleistung
     16 Stunden Vorbereitung Prüfung',  -- 29: selbststudienzeit_aufschluesselung (gekürzt)
-    'Lehrmaterial und aktuelle Informationen: https://informatik.htwk-leipzig.de/schwarz', -- 30: aktuelle_lehrressourcen (kein Wert)
-    'U. Kastens, H. Kleine Büning: "Modellierung: Grundlagen und formale Methoden", Hanser, 2008.
-    M. Huth, M. Ryan: "Logic in Computer Science”, Cambridge University Press, 2010.
-    U. Schöning: "Theoretische Informatik - kurzgefasst", Spektrum, in der aktuellen Auflage.
-    M. Broy, R. Steinbrüggen: "Modellbildung in der Informatik", Springer, 2004', -- 31: literatur (gekürzt)
+    NULL,                           -- 30: aktuelle_lehrressourcen
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
@@ -167,7 +162,7 @@ VALUES
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
-    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 9: studium_generale
     FALSE,                          -- 10: sprachenzentrum
     NULL,                           -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
@@ -189,7 +184,6 @@ VALUES
     0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
-    NULL,                           -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
@@ -206,7 +200,7 @@ VALUES
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
-    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 9: studium_generale
     FALSE,                          -- 10: sprachenzentrum
     'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/20425539587/CourseNode/99489065090706',    -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
@@ -244,10 +238,6 @@ VALUES
     0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
-    'W. Stallings: Operating Systems. Prentice Hall, New Jersey, 2003
-    Silberschatz: Operating System Concepts, 9nd. Wiley, 2012
-    M. Hailperin: "Operating Systems an Middleware, Supporting Controlled Intercation", CC BY-SA 3.0, Rev 1.3
-    J. Plötner, S. Wendzel: "Linux - Das umfassende Handbuch", Rheinwerk Computing, 2012', -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
@@ -264,7 +254,7 @@ VALUES
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
-    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 9: studium_generale
     FALSE,                          -- 10: sprachenzentrum
     'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/20425539587/CourseNode/99489065090706',                           -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
@@ -305,12 +295,6 @@ VALUES
     0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
-    'P. L. Dordal: "An Introduction to Computer Networks", CC BY-NC-ND 3.0, 2019.
-    A. S. Tanenbaum, D. J. Wetherall: „Computer Netzworks“, Prentice Hall, 5. Auflage, 2010.
-    K. R. Fall, W. R. Stevens: "TCP/IP Illustrated volume 1: The Protocols", Addison-Wesley, 2011.
-    L. L. Peterson, B. S. Davie: "Computer Networks: A Systems Approach", Morgan Kaufmann, 5. Auflage, 2011.
-    T. Nadeu, K. Gray: "SDN: Software Defined Networks", O`Reilly, 2013.
-    „Ethernet“, Heise Verlag, 2008.', -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
@@ -327,7 +311,7 @@ VALUES
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Sommer',                       -- 8: turnus
-    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 9: studium_generale
     FALSE,                          -- 10: sprachenzentrum
     'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/39268417537/CourseNode/77094584712802', -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
@@ -355,11 +339,6 @@ VALUES
     0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
-    'J. Ludewig, H. Lichter: "Software Engineering", dpunkt, in der aktuellen Auflage.
-    C. Rupp et al.: "UML 2 glasklar. Praxiswissen für die UML-Modellierung", Hanser, in der aktuellen Auflage.
-    H. Kellner: "Soziale Kompetenz für Ingenieure, Informatiker und Naturwissenschaftler", Hanser,2006.
-    U. Vigenschow, B. Schneider: "Soft Skills für Softwareentwickler", dpunkt, in der aktuellen Auflage.
-    R. Pichler: "Scrum - Agiles Projektmanagement erfolgreich einsetzen", dpunkt, 2007.', -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)
@@ -376,7 +355,7 @@ VALUES
     'Bachelor',                     -- 6: niveau NN
     1,                              -- 7: dauer
     'Winter',                       -- 8: turnus
-    FALSE,                          -- 9: studium_integrale
+    FALSE,                          -- 9: studium_generale
     FALSE,                          -- 10: sprachenzentrum
     'https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/41558605824?24', -- 11: opal_link (kein Wert)
     120,                            -- 12: gruppengroesse_vorlesung
@@ -407,11 +386,6 @@ VALUES
     0,                              -- 28: praesenzeit_woche_sonstiges (kein Wert)
     NULL,                           -- 29: selbststudienzeit_aufschluesselung (gekürzt)
     NULL,                           -- 30: aktuelle_lehrressourcen (kein Wert)
-    'J. Ludewig, H. Lichter: "Software Engineering", dpunkt, in der aktuellen Auflage.
-    C. Rupp et al.: "UML 2 glasklar. Praxiswissen für die UML-Modellierung", Hanser, in der aktuellen Auflage.
-    H. Kellner: "Soziale Kompetenz für Ingenieure, Informatiker und Naturwissenschaftler", Hanser, 2006.
-    U. Vigenschow, B. Schneider: "Soft Skills für Softwareentwickler", dpunkt, in der aktuellen Auflage.
-    R. Pichler: "Scrum - Agiles Projektmanagement erfolgreich einsetzen", dpunkt, 2007.',  -- 31: literatur (gekürzt)
     (SELECT fakultaet_id FROM fakultaet WHERE kuerzel = 'IM'), -- 32: fakultaet_id
     NULL,                           -- 33: studienrichtung_id (kein Wert)
     NULL,                           -- 34: vertiefung_id (kein Wert)

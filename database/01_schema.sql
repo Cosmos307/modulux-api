@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS block (
     vertiefung_id INT REFERENCES vertiefung(vertiefung_id) ON DELETE CASCADE
 );
 
-CREATE TABLE modul_historie (
+CREATE TABLE IF NOT EXISTS modul_historie (
     id SERIAL PRIMARY KEY,
     kuerzel VARCHAR(6) NOT NULL,
     version INT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE modul_historie (
     niveau studienniveau NOT NULL,
     dauer INT NOT NULL,
     turnus semester_turnus NOT NULL,
-    studium_integrale BOOLEAN NOT NULL DEFAULT FALSE,
+    studium_generale BOOLEAN NOT NULL DEFAULT FALSE,
     sprachenzentrum BOOLEAN NOT NULL DEFAULT FALSE,
     opal_link VARCHAR(255),
     gruppengroesse_vorlesung INT,
@@ -125,7 +125,7 @@ CREATE TABLE modul_historie (
     fakultaet_id INT,
     studienrichtung_id INT,
     vertiefung_id INT,
-    geaendert_am TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    aenderungsdatum TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     vorheriger_zustand_id INT REFERENCES modul_historie(id)
 
 );
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS modul (
     niveau studienniveau NOT NULL,
     dauer INT NOT NULL,
     turnus semester_turnus NOT NULL,
-    studium_integrale BOOLEAN NOT NULL DEFAULT FALSE,   --
+    studium_generale BOOLEAN NOT NULL DEFAULT FALSE,   --
     sprachenzentrum BOOLEAN NOT NULL DEFAULT FALSE,     --
     opal_link VARCHAR(255),
     gruppengroesse_vorlesung INT,
@@ -166,8 +166,6 @@ CREATE TABLE IF NOT EXISTS modul (
     ) STORED,
     selbststudienzeit_aufschluesselung TEXT,
     aktuelle_lehrressourcen TEXT,
-    literatur TEXT,
-    
     parent_modul_kuerzel VARCHAR(7),
     parent_modul_version INT,
     vorheriger_zustand_id INT,  
@@ -258,3 +256,33 @@ CREATE TABLE IF NOT EXISTS taxonomie_verb (
     FOREIGN KEY (kategorie_id) REFERENCES taxonomie_kategorie(id)
 );
 
+CREATE TABLE IF NOT EXISTS literatur (
+    literatur_id SERIAL PRIMARY KEY,
+    titel VARCHAR(255) NOT NULL,
+    autor VARCHAR(255),
+    jahr INT,
+    verlag VARCHAR(255),
+    isbn VARCHAR(20),
+    link VARCHAR(255),
+    doi VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS modul_literatur (
+    modul_kuerzel VARCHAR(6) NOT NULL,
+    modul_version INT NOT NULL,
+    literatur_id INT REFERENCES literatur(literatur_id) ON DELETE CASCADE,
+    vorheriger_snapshot_id INT,
+    PRIMARY KEY (modul_kuerzel, modul_version, literatur_id),
+    FOREIGN KEY (modul_kuerzel, modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS modul_literatur_historie (
+    id SERIAL PRIMARY KEY,
+    modul_kuerzel VARCHAR(6) NOT NULL,
+    modul_version INT NOT NULL,
+    literatur_id INT REFERENCES literatur(literatur_id) ON DELETE CASCADE,
+    aenderungsdatum TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    snapshot_id INT NOT NULL,
+    vorheriger_snapshot_id INT,
+    FOREIGN KEY (modul_kuerzel, modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE
+);

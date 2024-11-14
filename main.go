@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"modulux/api/controllers"
 	"modulux/api/middleware"
 	"modulux/api/routes"
 	"modulux/config"
@@ -18,6 +19,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to run server:", err)
 	}
+	err = r.Run(":6050")
+	if err != nil {
+		log.Fatal("Failed to run 6050 server:", err)
+	}
 
 }
 
@@ -27,5 +32,6 @@ func initialize() {
 	database.Connect(cfg)
 	log.Println("Successfully connected to the database")
 
+	controllers.InitializeCrossRef(cfg.CrossRefURL)
 	middleware.InitializeJWT(cfg.JWTSecret)
 }
