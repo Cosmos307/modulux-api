@@ -14,7 +14,7 @@ type Module struct {
 	Niveau                             string      `json:"niveau" binding:"required"`
 	Dauer                              int         `json:"dauer" binding:"required"`
 	Turnus                             string      `json:"turnus" binding:"required"`
-	StudiumIntegrale                   bool        `json:"studium_integrale"`
+	StudiumGenerale                    bool        `json:"studium_generale"`
 	Sprachenzentrum                    bool        `json:"sprachenzentrum"`
 	OpalLink                           null.String `json:"opal_link"`
 	GruppengroesseVorlesung            null.Int    `json:"gruppengroesse_vorlesung"`
@@ -38,7 +38,7 @@ type Module struct {
 	Selbststudienzeit                  int         `json:"selbststudienzeit"`
 	SelbststudienzeitAufschluesselung  null.String `json:"selbststudienzeit_aufschluesselung"`
 	AktuelleLehrressourcen             null.String `json:"aktuelle_lehrressourcen"`
-	Literatur                          null.String `json:"literatur"`
+	Literatur                          []Literatur
 	ParentModulKuerzel                 null.String `json:"parent_modul_kuerzel"`
 	ParentModulVersion                 null.Int    `json:"parent_modul_version"`
 	FakultaetID                        null.Int    `json:"fakultaet_id"`

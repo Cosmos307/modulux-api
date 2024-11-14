@@ -35,13 +35,20 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// Store the user information in the context
-		c.Set("user_id", claims["sub"])
+		userID, ok := claims["sub"].(string)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			c.Abort()
+			return
+		}
 
+		// Store the user information in the context
+		c.Set("user_id", userID)
 		c.Next()
 	}
 }
 
-// Authorize überprüft, ob der Benutzer die erforderlichen Berechtigungen hat
+// Authorize checks if the user has the reuired permissions
 func Authorize(requiredPermission string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		personID, exists := c.Get("user_id")
