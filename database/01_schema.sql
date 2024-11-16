@@ -240,14 +240,6 @@ CREATE TABLE IF NOT EXISTS taxonomie_kategorie (
     beschreibung TEXT
 );
 
-CREATE TABLE IF NOT EXISTS kognitiver_prozess (
-    id SERIAL PRIMARY KEY,
-    kategorie_id INT NOT NULL,
-    name VARCHAR(255) NOT NULL,
-
-    FOREIGN KEY (kategorie_id) REFERENCES taxonomie_kategorie(id)
-);
-
 CREATE TABLE IF NOT EXISTS taxonomie_verb (
     id SERIAL PRIMARY KEY,
     kategorie_id INT,
