@@ -14,7 +14,7 @@ import (
 // GetVerbsByCategory retrieves verbes from the database by category
 func GetVerbsByCategory(c *gin.Context) {
 
-	category := c.Param("category")
+	category := c.Param("kategorie")
 
 	verbs, err := retrieveVerbsFromDB(category)
 	if err != nil {
@@ -22,14 +22,15 @@ func GetVerbsByCategory(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"category": category, "verbs": verbs})
+	c.JSON(http.StatusOK, gin.H{"kategorie": category, "verben": verbs})
 }
 
 // GetTaxonomieFeedback returns feedback based on the number of verbs in the text
 func GetTaxonomieFeedback(c *gin.Context) {
 
 	var taxonomie models.Taxonomie
-	if err := c.ShouldBindJSON(&taxonomie); err != nil {
+	err := c.ShouldBindJSON(&taxonomie)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -42,17 +43,17 @@ func GetTaxonomieFeedback(c *gin.Context) {
 
 	var status string
 	if verbCount >= 5 {
-		status = "green"
+		status = "grün"
 	} else if verbCount >= 3 {
-		status = "yellow"
+		status = "gelb"
 	} else {
-		status = "red"
+		status = "rot"
 	}
 
 	response := map[string]interface{}{
-		"category":  taxonomie.Category,
-		"verbCount": verbCount,
-		"status":    status,
+		"kategorie":    taxonomie.Category,
+		"verbenanzahl": verbCount,
+		"ampelzustand": status,
 	}
 
 	c.JSON(http.StatusOK, response)

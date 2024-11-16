@@ -10,7 +10,7 @@ func TaxonomieRoutes(router *gin.Engine) {
 	taxonomieGroup := router.Group("/zielqualifikation")
 	{
 		taxonomieGroup.POST("/", controllers.GetTaxonomieFeedback)
-		taxonomieGroup.GET("/verben/:category", controllers.GetVerbsByCategory)
+		taxonomieGroup.GET("/verben/:kategorie", controllers.GetVerbsByCategory)
 
 	}
 }
