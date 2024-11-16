@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"database/sql"
 	"modulux/database"
 	"modulux/models"
 	"net/http"
@@ -237,6 +238,58 @@ func GetOpalLinks(c *gin.Context) {
 			return
 		}
 		modules = append(modules, module)
+	}
+
+	c.JSON(http.StatusOK, modules)
+}
+
+// GetModuleGoalsByStudiengangID retrieves all modules for a specific studiengang_id
+func GetModuleGoalsByStudiengangID(c *gin.Context) {
+	studiengangID := c.Param("id")
+	var modules []struct {
+		Kuerzel             string `json:"kuerzel"`
+		Version             int    `json:"version"`
+		Titel               string `json:"titel"`
+		Zielqualifikationen string `json:"zielqualifikationen"`
+	}
+
+	query := `
+        SELECT m.kuerzel, m.version, m.modultitel, m.qualifikationsziele
+        FROM modul m
+        JOIN modul_studiengang ms ON m.kuerzel = ms.modul_kuerzel AND m.version = ms.modul_version
+        WHERE ms.studiengang_id = $1
+    `
+	rows, err := database.DB.Query(context.Background(), query, studiengangID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var module struct {
+			Kuerzel             string `json:"kuerzel"`
+			Version             int    `json:"version"`
+			Titel               string `json:"titel"`
+			Zielqualifikationen sql.NullString
+		}
+		err := rows.Scan(&module.Kuerzel, &module.Version, &module.Titel, &module.Zielqualifikationen)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		modules = append(modules, struct {
+			Kuerzel             string `json:"kuerzel"`
+			Version             int    `json:"version"`
+			Titel               string `json:"titel"`
+			Zielqualifikationen string `json:"zielqualifikationen"`
+		}{
+			Kuerzel:             module.Kuerzel,
+			Version:             module.Version,
+			Titel:               module.Titel,
+			Zielqualifikationen: module.Zielqualifikationen.String,
+		})
 	}
 
 	c.JSON(http.StatusOK, modules)
