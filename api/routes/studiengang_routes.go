@@ -13,7 +13,8 @@ func StudiengangRoutes(router *gin.Engine) {
 		studiengangGroup.GET("/", controllers.GetStudiengaenge)
 		studiengangGroup.GET("/:id", controllers.GetStudiengang)
 		studiengangGroup.GET("/:id/modulverantwortliche", controllers.GetModulverantwortlicheByStudiengang)
-		studiengangGroup.PUT("/:id/", controllers.UpdateStudiengang)
+		studiengangGroup.GET("/:id/opal-links", controllers.GetOpalLinks)
+		studiengangGroup.PUT("/:id", controllers.UpdateStudiengang)
 		studiengangGroup.POST("/", controllers.CreateStudiengang)
 		studiengangGroup.DELETE("/:id", controllers.DeleteStudiengang)
 	}

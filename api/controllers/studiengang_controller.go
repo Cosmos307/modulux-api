@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/guregu/null"
 )
 
 // GetStudiengaenge retrieves all studiengaenge from the database
@@ -198,4 +199,45 @@ func GetModulverantwortlicheByStudiengang(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, modulverantwortliche)
+}
+
+// GetOpalLinks retrieves all modules with their opal links, kuerzel, and version from the database
+func GetOpalLinks(c *gin.Context) {
+	studiengang := c.Param("id")
+
+	var modules []struct {
+		Kuerzel  string      `json:"kuerzel"`
+		Version  int         `json:"version"`
+		OpalLink null.String `json:"opal_link"`
+	}
+
+	query := `
+		SELECT m.kuerzel, m.version, m.opal_link
+		FROM modul m
+		JOIN modul_studiengang sm ON m.kuerzel = sm.modul_kuerzel AND m.version = sm.modul_version
+		JOIN studiengang s ON sm.studiengang_id = s.studiengang_id
+		WHERE s.studiengang_id = $1
+	`
+	rows, err := database.DB.Query(context.Background(), query, studiengang)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var module struct {
+			Kuerzel  string      `json:"kuerzel"`
+			Version  int         `json:"version"`
+			OpalLink null.String `json:"opal_link"`
+		}
+		err := rows.Scan(&module.Kuerzel, &module.Version, &module.OpalLink)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		modules = append(modules, module)
+	}
+
+	c.JSON(http.StatusOK, modules)
 }
