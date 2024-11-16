@@ -100,7 +100,7 @@ func GetModulStudiengangByModul(c *gin.Context) {
 }
 
 // GetModulStudiengangByStudiengang retrieves all modul_studiengang entries for a specific studiengang_id
-func GetModulStudiengangByStudiengang(c *gin.Context) {
+func GetModulStudiengangByStudiengangID(c *gin.Context) {
 
 	studiengangID := c.Param("studiengang_id")
 	var moduleStudiengaenge []models.ModulStudiengang
@@ -208,4 +208,3 @@ func AddModulStudiengang(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Eintrag erfolgreich hinzugefügt"})
 }
-

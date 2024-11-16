@@ -13,7 +13,7 @@ func ModulStudiengangRoutes(router *gin.Engine) {
 		moduleSGroup.GET("/", controllers.GetAllModulStudiengang)
 		moduleSGroup.GET("/:modul_kuerzel/modul_version/studiengang_id ", controllers.GetSpecificModulStudiengang)
 		moduleSGroup.GET("/modul/:modul_kuerzel/:modul_version", controllers.GetModulStudiengangByModul)
-		moduleSGroup.GET("/studiengang/:studiengang_id", controllers.GetModulStudiengangByStudiengang)
+		moduleSGroup.GET("/studiengang/:studiengang_id", controllers.GetModulStudiengangByStudiengangID)
 		moduleSGroup.POST("/", controllers.AddModulStudiengang)
 	}
 }
