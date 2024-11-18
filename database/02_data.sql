@@ -394,8 +394,10 @@ VALUES
     NULL                            -- vorheriger_zustand_id
 );
 
-INSERT INTO modul_voraussetzung (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version)
-VALUES('C171', 0, 'C073', 0);
+INSERT INTO modul_voraussetzung (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version, studiengang_id)
+VALUES
+    ('C171', 0, 'C073', 0, 1),
+    ('C171', 0, 'C073', 0, 2);
 
 -- Modulverantwortliche & Dozenten
 -- Modellierung

@@ -181,12 +181,14 @@ CREATE TABLE IF NOT EXISTS modul (
 );
 
 CREATE TABLE IF NOT EXISTS modul_voraussetzung (
+    studiengang_id INT,
     modul_kuerzel VARCHAR(6),
     modul_version INT,
     vorausgesetztes_modul_kuerzel VARCHAR(6),
     vorausgesetztes_modul_version INT,
 
-    PRIMARY KEY (modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version),
+    PRIMARY KEY (studiengang_id, modul_kuerzel, modul_version, vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version),
+    FOREIGN KEY (studiengang_id) REFERENCES studiengang(studiengang_id) ON DELETE CASCADE,
     FOREIGN KEY (modul_kuerzel, modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE,
     FOREIGN KEY (vorausgesetztes_modul_kuerzel, vorausgesetztes_modul_version) REFERENCES modul(kuerzel, version) ON DELETE CASCADE
 );
