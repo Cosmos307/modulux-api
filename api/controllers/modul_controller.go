@@ -17,7 +17,14 @@ import (
 // GetModules retrieves all modules from the database
 func GetModules(c *gin.Context) {
 	var modules []models.Module
-	query := "SELECT * FROM modul"
+
+	query := `
+        SELECT m.kuerzel, m.version, m.modultitel, m.qualifikationsziele,
+            l.literatur_id, l.titel, l.autor, l.jahr, l.verlag, l.isbn, l.link, l.doi
+        FROM modul m
+        LEFT JOIN modul_literatur ml ON m.kuerzel = ml.modul_kuerzel AND m.version = ml.modul_version
+        LEFT JOIN literatur l ON ml.literatur_id = l.literatur_id
+    `
 
 	rows, err := database.DB.Query(context.Background(), query)
 	if err != nil {
@@ -26,55 +33,32 @@ func GetModules(c *gin.Context) {
 	}
 	defer rows.Close()
 
+	moduleMap := make(map[string]*models.Module)
+
 	for rows.Next() {
 		var module models.Module
-		err := rows.Scan(
-			&module.Kuerzel, &module.Version, &module.FruehererSchluessel, &module.Modultitel, &module.ModultitelEnglisch,
-			&module.Kommentar, &module.Niveau, &module.Dauer, &module.Turnus, &module.StudiumGenerale, &module.Sprachenzentrum,
-			&module.OpalLink, &module.GruppengroesseVorlesung, &module.GruppengroesseUebung, &module.GruppengroessePraktikum,
-			&module.Lehrform, &module.Medienform, &module.Lehrinhalte, &module.Qualifikationsziele, &module.SozialUndSelbstkompetenzen,
-			&module.BesondereZulassungsvoraussetzungen, &module.EmpfohleneVoraussetzungen, &module.Fortsetzungsmoeglichkeiten,
-			&module.Hinweise, &module.EctsCredits, &module.Workload, &module.PraesenzeitWocheVorlesung, &module.PraesenzeitWocheUebung,
-			&module.PraesenzeitWochePraktikum, &module.PraesenzeitWocheSonstiges, &module.Selbststudienzeit, &module.SelbststudienzeitAufschluesselung,
-			&module.AktuelleLehrressourcen, &module.ParentModulKuerzel, &module.ParentModulVersion, &module.FakultaetID,
-			&module.StudienrichtungID, &module.VertiefungID,
-		)
+		var literatur models.Literatur
+		err := rows.Scan(&module.Kuerzel, &module.Version, &module.Modultitel, &module.Qualifikationsziele,
+			&literatur.LiteraturID, &literatur.Titel, &literatur.Autor, &literatur.Jahr, &literatur.Verlag, &literatur.ISBN, &literatur.Link, &literatur.DOI)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		modules = append(modules, module)
 
-		// Abfrage der Literaturdaten für das Modul
-		literaturQuery := `
-	 		SELECT l.literatur_id, l.titel, l.autor, l.jahr, l.verlag, l.isbn, l.link, l.doi
-	 		FROM literatur l
-			JOIN modul_literatur ml ON l.literatur_id = ml.literatur_id
-			WHERE ml.modul_kuerzel = $1 AND ml.modul_version = $2
-		`
-		literaturRows, err := database.DB.Query(context.Background(), literaturQuery, module.Kuerzel, module.Version)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		defer literaturRows.Close()
-
-		for literaturRows.Next() {
-			var literatur models.Literatur
-			err := literaturRows.Scan(
-				&literatur.LiteraturID, &literatur.Titel, &literatur.Autor, &literatur.Jahr, &literatur.Verlag,
-				&literatur.ISBN, &literatur.Link, &literatur.DOI,
-			)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
+		key := module.Kuerzel + "-" + strconv.Itoa(module.Version)
+		if existingModule, exists := moduleMap[key]; exists {
+			existingModule.Literatur = append(existingModule.Literatur, literatur)
+		} else {
+			if literatur.LiteraturID.Valid {
+				module.Literatur = []models.Literatur{literatur}
 			}
-			module.Literatur = append(module.Literatur, literatur)
+			moduleMap[key] = &module
 		}
-
-		modules = append(modules, module)
 	}
 
+	for _, module := range moduleMap {
+		modules = append(modules, *module)
+	}
 	c.JSON(http.StatusOK, modules)
 }
 
@@ -98,7 +82,7 @@ func GetModule(c *gin.Context) {
 		&module.Hinweise, &module.EctsCredits, &module.Workload, &module.PraesenzeitWocheVorlesung, &module.PraesenzeitWocheUebung,
 		&module.PraesenzeitWochePraktikum, &module.PraesenzeitWocheSonstiges, &module.Selbststudienzeit, &module.SelbststudienzeitAufschluesselung,
 		&module.AktuelleLehrressourcen, &module.ParentModulKuerzel, &module.ParentModulVersion, &module.FakultaetID,
-		&module.StudienrichtungID, &module.VertiefungID,
+		&module.StudienrichtungID, &module.VertiefungID, &module.VorherigerZustandID,
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -426,14 +410,14 @@ func saveModuleHistory(tx pgx.Tx, kuerzel string, version int) (int, error) {
             kuerzel, version, frueherer_schluessel, modultitel, modultitel_englisch, kommentar, niveau, dauer, turnus, studium_generale, sprachenzentrum, opal_link,
             gruppengroesse_vorlesung, gruppengroesse_uebung, gruppengroesse_praktikum, lehrform, medienform, lehrinhalte, qualifikationsziele, sozial_und_selbstkompetenzen,
             besondere_zulassungsvoraussetzungen, empfohlene_voraussetzungen, fortsetzungsmoeglichkeiten, hinweise, ects_credits, praesenzeit_woche_vorlesung,
-            praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, 
+            praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, 
             parent_modul_kuerzel, parent_modul_version, fakultaet_id, studienrichtung_id, vertiefung_id, vorheriger_zustand_id
         )
         SELECT
             kuerzel, version, frueherer_schluessel, modultitel, modultitel_englisch, kommentar, niveau, dauer, turnus, studium_generale, sprachenzentrum, opal_link,
             gruppengroesse_vorlesung, gruppengroesse_uebung, gruppengroesse_praktikum, lehrform, medienform, lehrinhalte, qualifikationsziele, sozial_und_selbstkompetenzen,
             besondere_zulassungsvoraussetzungen, empfohlene_voraussetzungen, fortsetzungsmoeglichkeiten, hinweise, ects_credits, praesenzeit_woche_vorlesung,
-            praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, 
+            praesenzeit_woche_uebung, praesenzeit_woche_praktikum, praesenzeit_woche_sonstiges, selbststudienzeit_aufschluesselung, aktuelle_lehrressourcen, 
             parent_modul_kuerzel, parent_modul_version, fakultaet_id, studienrichtung_id, vertiefung_id, vorheriger_zustand_id
         FROM modul
         WHERE kuerzel = $1 AND version = $2

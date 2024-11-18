@@ -257,7 +257,7 @@ func ConfirmLiteratureSelection(c *gin.Context) {
 
 	fmt.Println("Literatur ID durch:", literaturID)
 
-	// Ermitteln der höchsten snapshot_id für das spezifische Modul und die Version
+	// Get the max snapshot ID for the module and version
 	var maxSnapshotID sql.NullInt32
 	err = tx.QueryRow(context.Background(), `
         SELECT COALESCE(MAX(snapshot_id), 0)
