@@ -7,6 +7,7 @@ import (
 	"modulux/models"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/guregu/null"
@@ -266,6 +267,7 @@ func GetModuleGoalsByStudiengangID(c *gin.Context) {
 	}
 	defer rows.Close()
 
+	found := false
 	for rows.Next() {
 		var module struct {
 			Kuerzel             string `json:"kuerzel"`
@@ -291,6 +293,89 @@ func GetModuleGoalsByStudiengangID(c *gin.Context) {
 			Zielqualifikationen: module.Zielqualifikationen.String,
 		})
 	}
+	if !found {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Keine Module gefunden"})
+		return
+	}
 
+	c.JSON(http.StatusOK, modules)
+}
+
+// GetModuleWithLiteratureByStudiengangID retrieves all modules with their literature for a specific studiengang_id, excluding specified modules
+func GetModuleWithLiteratureByStudiengangID(c *gin.Context) {
+	studiengangIDStr := c.Param("id")
+	studiengangID, err := strconv.Atoi(studiengangIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid studiengang_id"})
+		return
+	}
+
+	type ExcludeModulesRequest struct {
+		Exclude []string `json:"auszuschliessende_module"`
+	}
+	var request ExcludeModulesRequest
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		return
+	}
+
+	var modules []models.Module
+
+	query := `
+        SELECT m.kuerzel, m.version, m.modultitel, m.qualifikationsziele,
+            l.literatur_id, l.titel, l.autor, l.jahr, l.verlag, l.isbn, l.link, l.doi
+        FROM modul m
+        JOIN modul_studiengang ms ON m.kuerzel = ms.modul_kuerzel AND m.version = ms.modul_version
+        LEFT JOIN modul_literatur ml ON m.kuerzel = ml.modul_kuerzel AND m.version = ml.modul_version
+        LEFT JOIN literatur l ON ml.literatur_id = l.literatur_id
+        WHERE ms.studiengang_id = $1
+    `
+
+	// Wenn Module ausgeschlossen werden sollen, füge die entsprechenden Bedingungen zur Abfrage hinzu
+	if len(request.Exclude) > 0 {
+		excludeConditions := make([]string, len(request.Exclude))
+		for i, exclude := range request.Exclude {
+			parts := strings.Split(exclude, "-")
+			if len(parts) == 2 {
+				excludeConditions[i] = "(m.kuerzel != '" + parts[0] + "' OR m.version != " + parts[1] + ")"
+			}
+		}
+		query += " AND " + strings.Join(excludeConditions, " AND ")
+	}
+
+	rows, err := database.DB.Query(context.Background(), query, studiengangID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer rows.Close()
+
+	moduleMap := make(map[string]*models.Module)
+
+	for rows.Next() {
+		var module models.Module
+		var literatur models.Literatur
+		err := rows.Scan(&module.Kuerzel, &module.Version, &module.Modultitel, &module.Qualifikationsziele,
+			&literatur.LiteraturID, &literatur.Titel, &literatur.Autor, &literatur.Jahr, &literatur.Verlag, &literatur.ISBN, &literatur.Link, &literatur.DOI)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		key := module.Kuerzel + "-" + strconv.Itoa(module.Version)
+		if existingModule, exists := moduleMap[key]; exists {
+			existingModule.Literatur = append(existingModule.Literatur, literatur)
+		} else {
+			if literatur.LiteraturID != (null.Int{}) {
+				module.Literatur = []models.Literatur{literatur}
+			}
+			moduleMap[key] = &module
+		}
+	}
+
+	for _, module := range moduleMap {
+		modules = append(modules, *module)
+	}
 	c.JSON(http.StatusOK, modules)
 }
