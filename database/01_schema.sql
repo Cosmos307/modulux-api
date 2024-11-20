@@ -116,10 +116,11 @@ CREATE TABLE IF NOT EXISTS modul_historie (
     praesenzeit_woche_uebung INT,
     praesenzeit_woche_praktikum INT,
     praesenzeit_woche_sonstiges INT,
-    selbststudienzeit INT,
+    selbststudienzeit INT GENERATED ALWAYS AS (
+        (ROUND(ects_credits * 30)) - (14 * (praesenzeit_woche_vorlesung + praesenzeit_woche_uebung + praesenzeit_woche_praktikum + praesenzeit_woche_sonstiges))
+    ) STORED,
     selbststudienzeit_aufschluesselung TEXT,
     aktuelle_lehrressourcen TEXT,
-    literatur TEXT,
     parent_modul_kuerzel VARCHAR(6),
     parent_modul_version INT,
     fakultaet_id INT,
