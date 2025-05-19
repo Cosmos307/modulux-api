@@ -1,93 +1,114 @@
 # modulux-api
 
+Die **modulux-api** ist eine prototypische RESTful API zur Verwaltung von Modulen, Studiengängen und deren Beziehungen. Sie entstand aus dem Bedarf, die bestehende monolithische Webanwendung der Moduldatenbank Modulux – bisher als TYPO3-Modul im Einsatz – durch eine moderne, flexible und erweiterbare Lösung abzulösen.
+
+Modulux wird an der Hochschule für Technik, Wirtschaft und Kultur Leipzig (HTWK Leipzig) zur Organisation und Verwaltung von Studiengängen und Modulen eingesetzt. Die bisherige monolithische Architektur erschwert jedoch die Integration mit anderen Systemen, die Erweiterbarkeit sowie die Nachverfolgbarkeit von Änderungen. Zudem fehlen Schnittstellen für externe Zugriffe und eine zeitgemäße Versionsverwaltung.
+
+Mit der modulux-api wird eine Grundlage geschaffen, um diese Schwächen zu adressieren: Die API bietet klare Schnittstellen, unterstützt Versionierung, ermöglicht parallele Arbeitsstände und setzt ein Rollenkonzept zur gezielten Zugriffssteuerung um. Ziel ist es, die Verwaltung von Curricula effizienter, transparenter und zukunftssicher zu gestalten – sowohl für Hochschulen als auch für vergleichbare Bildungseinrichtungen.
 
 
-## Getting started
+## Motivation
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Die API adressiert typische Herausforderungen monolithischer Systeme:
+- **Fehlende Schnittstellen:** Erschwerte Integration und Erweiterbarkeit.
+- **Keine moderne Versionsverwaltung:** Eingeschränkte Nachverfolgbarkeit von Änderungen.
+- **Eingeschränkte Arbeitsstände:** Begrenzte Möglichkeiten zur parallelen Bearbeitung und Sicherung.
+- **Hoher Wartungsaufwand:** Geringe Flexibilität und schwierige Anpassbarkeit.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Mit modulux-api sollen Verwaltungsprozesse effizienter, transparenter und zukunftssicher gestaltet werden.
 
-## Add your files
+## Zielsetzung
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- **Moderne N-Tier-Architektur:** Klare Trennung von Verantwortlichkeiten und einfache Erweiterbarkeit.
+- **Versionierbarkeit:** Detaillierte Änderungshistorie und Rollback-Funktionalität für Module.
+- **Rollenkonzept:** Unterschiedliche Nutzergruppen erhalten gezielten Zugriff auf Funktionen und Daten.
+- **Konsistente Referenzierung:** Eindeutige Zuordnung und Nachvollziehbarkeit von Modulen und Studiengängen.
 
+## Features
+
+- Verwaltung von Modulen (CRUD, Versionierung, Rollback)
+- Verwaltung von Studiengängen und deren Modulen
+- Verwaltung von Modul-Voraussetzungen
+- Literaturverwaltung für Module
+- Benutzer- und Rollenmanagement
+- Umfangreiche Validierungen und Fehlerbehandlung
+
+## Projektstruktur
 ```
-cd existing_repo
-git remote add origin https://gitlab.dit.htwk-leipzig.de/maximilian_cosmo.barth/modulux-api.git
-git branch -M main
-git push -uf origin main
+todo-app/
+│
+├── api/
+│   ├── Dockerfile          # Docker-Build-Definition für das API-Backend
+│   ├── go.mod, go.sum      # Go Modules Definition & Checksummen
+│   ├── cmd/
+│   │   └── server/
+│   │       └── main.go     # Einstiegspunkt (main.go)
+│   └── internal/
+│       ├── config/
+│       ├── database/       # Datenbankverbindung und -initialisierung      
+│       ├── handlers/
+│       ├── models/
+│       ├── repository/
+│       │   └── mocks/      # Mock-Repositories für Tests
+│       ├── routes/         # Definition der API-Routen
+│       └── tests/          # Unit- und Integrationstests
+├── database/   	        # SQL-Skripte für Migrationen und Seed-Daten
+├── docker-compose.yml      # Container-Orchestrierung
+├── .gitignore              # Git Ignore-Datei
+└── README.md
 ```
+## Wichtige Komponenten
 
-## Integrate with your tools
+### Controller
 
-- [ ] [Set up project integrations](https://gitlab.dit.htwk-leipzig.de/maximilian_cosmo.barth/modulux-api/-/settings/integrations)
+- [`api/controllers/modul_controller.go`](modulux-api/api/controllers/modul_controller.go): Modulverwaltung, Versionierung, Rollback, Literatur
+- [`api/controllers/modul_voraussetzung_controller.go`](modulux-api/api/controllers/modul_voraussetzung_controller.go): Verwaltung von Modul-Voraussetzungen
+- [`api/controllers/modul_studiengang_controller.go`](modulux-api/api/controllers/modul_studiengang_controller.go): Zuordnung von Modulen zu Studiengängen
+- [`api/controllers/studiengang_controller.go`](modulux-api/api/controllers/studiengang_controller.go): Studiengangverwaltung
+- ...
 
-## Collaborate with your team
+### Middleware
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- [`api/middleware/`](modulux-api/api/middleware/):  
+  - Authentifizierung (Login, JWT-Token)
+  - Autorisierung (z.B. Rollenüberprüfung für aufgerufene Endpunkte)
+  - Logging und Fehlerbehandlung
 
-## Test and Deploy
+### Models
 
-Use the built-in continuous integration in GitLab.
+- [`models/modul.go`](modulux-api/models/modul.go): Modulstruktur mit allen Eigenschaften
+- Weitere Modelle für Studiengänge, Literatur, Benutzer etc.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Routen
 
-***
+- [`api/routes/modul_routes.go`](modulux-api/api/routes/modul_routes.go): Endpunkte für Module
+- [`api/routes/modul_voraussetzung_routes.go`](modulux-api/api/routes/modul_voraussetzung_routes.go): Endpunkte für Modul-Voraussetzungen
+- ...
 
-# Editing this README
+## Beispiel-Endpunkte
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- `GET /modul/` – Alle Module abrufen
+- `POST /modul/` – Neues Modul anlegen
+- `PUT /modul/:kuerzel/:version` – Modul aktualisieren (mit Auth)
+- `POST /modul/:kuerzel/:version/reset` – Letzte Änderung zurücksetzen (Rollback)
+- `GET /modul_voraussetzungen/:studiengang_id/:modul_kuerzel/:modul_version` – Voraussetzungen eines Moduls abrufen
 
-## Suggestions for a good README
+## Authentifizierung & Autorisierung
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- Middleware prüft JWT-Token und Rollen
+- Nur berechtigte Nutzer können bestimmte Aktionen (z.B. Modul bearbeiten) durchführen
 
-## Name
-Choose a self-explaining name for your project.
+## Datenbank
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- PostgreSQL
+- Migrationen und Seed-Daten in [`database/`](modulux-api/database/)
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Deployment
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+- Dockerfile und docker-compose für lokalen und produktiven Betrieb
+- Umgebungsvariablen für Konfiguration
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## Entwicklung & Tests
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- Go Modules (`go.mod`)
+- Unit- und Integrationstests (siehe Testverzeichnisse in den Controllern)
