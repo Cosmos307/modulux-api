@@ -1,10 +1,14 @@
 # modulux-api
 
-Die **modulux-api** ist eine prototypische RESTful API zur Verwaltung von Modulen, Studiengängen und deren Beziehungen. Sie entstand aus dem Bedarf, die bestehende monolithische Webanwendung der Moduldatenbank Modulux – bisher als TYPO3-Modul im Einsatz – durch eine moderne, flexible und erweiterbare Lösung abzulösen.
+Die **modulux-api** ist eine prototypische RESTful API zur Verwaltung von Modulen, Studiengängen und deren Beziehungen und stellt den praktischen Teil meiner Bachelorarbeit dar. Sie entstand aus dem Bedarf, die bestehende monolithische Webanwendung der Moduldatenbank Modulux – bisher als TYPO3-Modul im Einsatz – durch eine moderne, flexible und erweiterbare Lösung abzulösen.
 
-Modulux wird an der Hochschule für Technik, Wirtschaft und Kultur Leipzig (HTWK Leipzig) zur Organisation und Verwaltung von Studiengängen und Modulen eingesetzt. Die bisherige monolithische Architektur erschwert jedoch die Integration mit anderen Systemen, die Erweiterbarkeit sowie die Nachverfolgbarkeit von Änderungen. Zudem fehlen Schnittstellen für externe Zugriffe und eine zeitgemäße Versionsverwaltung.
+Modulux wird an der Hochschule für Technik, Wirtschaft und Kultur Leipzig (HTWK Leipzig) zur Organisation und Verwaltung von Studiengängen und Modulen eingesetzt. Die bisherige monolithische Architektur erschwert jedoch die Integration mit anderen Systemen, die Erweiterbarkeit sowie die Nachverfolgbarkeit von Änderungen. Zudem fehlen Schnittstellen für externe Zugriffe, eine zeitgemäße Versionsverwaltung sowie diverse Unterstützungen für Bearbeiter.
 
-Mit der modulux-api wird eine Grundlage geschaffen, um diese Schwächen zu adressieren: Die API bietet klare Schnittstellen, unterstützt Versionierung, ermöglicht parallele Arbeitsstände und setzt ein Rollenkonzept zur gezielten Zugriffssteuerung um. Ziel ist es, die Verwaltung von Curricula effizienter, transparenter und zukunftssicher zu gestalten – sowohl für Hochschulen als auch für vergleichbare Bildungseinrichtungen.
+Mit der modulux-api wird eine Grundlage geschaffen, um diese Schwächen zu adressieren: Die API bietet klare Schnittstellen, unterstützt Versionierung, leistet Unterstützungen und Kontrollen für Datenkonsistenz, ermöglicht parallele Arbeitsstände und setzt ein Rollenkonzept zur gezielten Zugriffssteuerung um. Ziel ist es, die Verwaltung von Curricula effizienter, transparenter und zukunftssicher zu gestalten – sowohl für Hochschulen als auch für vergleichbare Bildungseinrichtungen.
+
+## Architektur
+![Softwarearchitektur](images/Softwarearchitektur-Diagramm.png)
+![Datenbankarchitektur](images/Datenbank-Diagramm.png)
 
 
 ## Motivation
@@ -14,24 +18,20 @@ Die API adressiert typische Herausforderungen monolithischer Systeme:
 - **Keine moderne Versionsverwaltung:** Eingeschränkte Nachverfolgbarkeit von Änderungen.
 - **Eingeschränkte Arbeitsstände:** Begrenzte Möglichkeiten zur parallelen Bearbeitung und Sicherung.
 - **Hoher Wartungsaufwand:** Geringe Flexibilität und schwierige Anpassbarkeit.
+- **Keine Unterstützung:** Bearbeiter können im aktuellen Modulux System Freitext eintragen, ohne Verifikation und Kontrolle der Eingaben sind  menschliche Fehler vorprogrammiert.
 
 Mit modulux-api sollen Verwaltungsprozesse effizienter, transparenter und zukunftssicher gestaltet werden.
 
-## Zielsetzung
-
-- **Moderne N-Tier-Architektur:** Klare Trennung von Verantwortlichkeiten und einfache Erweiterbarkeit.
-- **Versionierbarkeit:** Detaillierte Änderungshistorie und Rollback-Funktionalität für Module.
-- **Rollenkonzept:** Unterschiedliche Nutzergruppen erhalten gezielten Zugriff auf Funktionen und Daten.
-- **Konsistente Referenzierung:** Eindeutige Zuordnung und Nachvollziehbarkeit von Modulen und Studiengängen.
-
-## Features
+## Features der programmierten API
 
 - Verwaltung von Modulen (CRUD, Versionierung, Rollback)
 - Verwaltung von Studiengängen und deren Modulen
-- Verwaltung von Modul-Voraussetzungen
-- Literaturverwaltung für Module
-- Benutzer- und Rollenmanagement
+- Verwaltung von Modul-Voraussetzungen inkl. Konsistenzprüfung und Vorschlagsfunktion von vorherigen Modulen
+- Literaturverwaltung für Module mit automatisierten Literaturvorschlägen (CrossRef-API-Abfragen)
+- Unterstützung bei der Formulierung von Qualifikationszielen (Taxonomie-Feedback, Verbvorschläge)
+- Benutzer- und Rollenmanagement mit Authentifizierung (JWT) und Autorisierung 
 - Umfangreiche Validierungen und Fehlerbehandlung
+- Bereitstellung von Kalender-relevanten Modulinformationen (z.B. Opal-Links) für externe Anwendungen
 
 ## Projektstruktur
 ```
